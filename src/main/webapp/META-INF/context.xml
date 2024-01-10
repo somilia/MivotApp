@@ -1,0 +1,12 @@
+<Context>
+
+    <Resource name="jdbc/myDatasource" auth="Container"
+              type="javax.sql.DataSource"
+              driverClassName="org.postgresql.Driver"
+
+              url="jdbc:postgresql:mivot_db"
+              username="saadmin"
+
+              maxActive="10" maxWait="2000" />
+
+</Context>
