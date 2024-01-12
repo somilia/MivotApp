@@ -28,7 +28,6 @@ dependencies {
   implementation 'org.postgresql:postgresql:42.2.12'
   // https://mvnrepository.com/artifact/uk.ac.starlink/stil
   implementation 'uk.ac.starlink:stil:4.2'
-
   testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
 }
