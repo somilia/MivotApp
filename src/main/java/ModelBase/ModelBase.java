@@ -1,13 +1,16 @@
 package ModelBase;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ModelBase {
 
     private Map<String, Object> dictionary;
+    Map<String, List<String>> mappeable;
 
-    public ModelBase() {
+    public ModelBase(Map<String, List<String>> mappeable) {
+        this.mappeable = mappeable;
         this.dictionary = new HashMap<>();
     }
     
@@ -47,34 +50,34 @@ public class ModelBase {
         }
     }
 
-    public static void main(String[] args) {
-        ModelBase ModelBase = new ModelBase();
-
-        // Add elements to the dictionary
-        ModelBase.add("key1", "value1");
-        ModelBase.add("key2", "value2");
-
-        // Add a nested dictionary
-        Map<String, Object> nestedDict = new HashMap<>();
-        nestedDict.put("nestedKey1", "nestedValue1");
-        nestedDict.put("nestedKey2", "nestedValue2");
-        ModelBase.add("ModelBase", nestedDict);
-
-        // Add a nested dictionary
-        Map<String, Object> nestedDict2 = new HashMap<>();
-        nestedDict2.put("nestedKey3", "nestedValue3");
-        nestedDict2.put("nestedKey4", "nestedValue4");
-        ModelBase.add("ModelBase2", nestedDict2);
-
-        // Add a nested dictionary
-        Map<String, Object> nestedDict3 = new HashMap<>();
-        nestedDict2.put("nestedKey5", "nestedValue5");
-        nestedDict2.put("nestedKey6", "nestedValue6");
-        ModelBase.add("ModelBase2", nestedDict2);
-
-        // Print the content of the dictionary
-        ModelBase.print();
-
-    }
+//    public static void main(String[] args) {
+//        ModelBase ModelBase = new ModelBase();
+//
+//        // Add elements to the dictionary
+//        ModelBase.add("key1", "value1");
+//        ModelBase.add("key2", "value2");
+//
+//        // Add a nested dictionary
+//        Map<String, Object> nestedDict = new HashMap<>();
+//        nestedDict.put("nestedKey1", "nestedValue1");
+//        nestedDict.put("nestedKey2", "nestedValue2");
+//        ModelBase.add("ModelBase", nestedDict);
+//
+//        // Add a nested dictionary
+//        Map<String, Object> nestedDict2 = new HashMap<>();
+//        nestedDict2.put("nestedKey3", "nestedValue3");
+//        nestedDict2.put("nestedKey4", "nestedValue4");
+//        ModelBase.add("ModelBase2", nestedDict2);
+//
+//        // Add a nested dictionary
+//        Map<String, Object> nestedDict3 = new HashMap<>();
+//        nestedDict2.put("nestedKey5", "nestedValue5");
+//        nestedDict2.put("nestedKey6", "nestedValue6");
+//        ModelBase.add("ModelBase2", nestedDict2);
+//
+//        // Print the content of the dictionary
+//        ModelBase.print();
+//
+//    }
 }
 
