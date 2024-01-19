@@ -2,11 +2,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>JSP - Hello World</title>
+  <title>JSP - Mivot TAP</title>
 </head>
 <body>
 <h1><%= "MivotApp" %></h1>
 <br/>
-<a href="hello-servlet">Hello Servlet</a>
+<a href="mivot-tap">Mivot TAP</a>
 </body>
 </html>

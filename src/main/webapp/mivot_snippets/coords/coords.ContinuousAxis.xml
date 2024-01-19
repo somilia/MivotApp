@@ -1,0 +1,7 @@
+<INSTANCE dmrole="" dmtype="coords:ContinuousAxis">
+   <!-- Axis description for continuous data.  This object describes the domain for a particular axis of the domain space.  It allows for the specification of the legal domain range (min,max), and a flag indicating if the axis is cyclic." -->
+   <ATTRIBUTE dmrole="coords:Axis.name" dmtype="ivoa:string" ref="@@@@@" value=""/>
+   <ATTRIBUTE dmrole="coords:ContinuousAxis.domainMin" dmtype="ivoa:Quantity" unit="" ref="@@@@@" value=""/>
+   <ATTRIBUTE dmrole="coords:ContinuousAxis.domainMax" dmtype="ivoa:Quantity" unit="" ref="@@@@@" value=""/>
+   <ATTRIBUTE dmrole="coords:ContinuousAxis.cyclic" dmtype="ivoa:boolean" unit="" ref="@@@@@" value=""/>
+</INSTANCE>

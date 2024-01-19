@@ -1,0 +1,20 @@
+<INSTANCE dmrole="" dmtype="mango:exterrors.DiagMatrix2x2">
+   <!-- Simple diagonal matrix of variances" -->
+   <INSTANCE dmrole="meas:Error" dmtype="meas:Error"/>
+   <ATTRIBUTE dmrole="mango:exterrors.MultiParamError.confidenceLevel" dmtype="ivoa:integer" unit="" ref="@@@@@" value=""/>
+   <ATTRIBUTE dmrole="mango:exterrors.MultiParamError.unit" dmtype="ivoa:Unit" unit="" ref="@@@@@" value=""/>
+   <COLLECTION dmrole="mango:exterrors.MultiParamError.correlatedErrors">
+      <INSTANCE dmrole="" dmtype="mango:exterrors.CorrelatedError">
+         <!-- Correlation coefficients between the error of the host parameter and one of its associated parameters.
+The host parameter is one of the \texttt{mango:Parameter} of the \texttt{mango:ParameterDock} (a position typically) of the Mango object.
+The associated parameter is one of the \texttt{mango:Parameter.associatedParameters} of that parameter (typically a proper motion)
+There is no logical link between the correlated error instance and the associated parameter it refers to.
+The associated parameter is identified by the \texttt{UCD field}. The client is in charge of solving this dependency.
+" -->
+         <ATTRIBUTE dmrole="mango:exterrors.CorrelatedError.ucd" dmtype="ivoa:string" ref="@@@@@" value=""/>
+      </INSTANCE>
+   </COLLECTION>
+   <!-- Datatype containing the 2 diagonal elements of a 2x2 matrix. 
+Attributes are named $\sigma$ because this datatype is mostly used in the context of complex errors. -->
+   <ATTRIBUTE dmrole="mango:exterrors.DiagMatrix2x2.diagMatrix" dmtype="mango:ErrorTypes.DiagElems2x2" ref="@@@@@" value=""/>
+</INSTANCE>

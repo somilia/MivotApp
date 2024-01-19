@@ -1,0 +1,5 @@
+<INSTANCE dmrole="" dmtype="meas:Bounds1D">
+   <!-- Provide the edges of the uncertainty space.  Rather than being relative to the associated Coordinate, these represent a range within that Coordinate space." -->
+   <ATTRIBUTE dmrole="meas:Bounds1D.loLimit" dmtype="ivoa:RealQuantity" unit="" ref="@@@@@" value=""/>
+   <ATTRIBUTE dmrole="meas:Bounds1D.hiLimit" dmtype="ivoa:RealQuantity" unit="" ref="@@@@@" value=""/>
+</INSTANCE>

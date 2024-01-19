@@ -1,0 +1,59 @@
+<INSTANCE dmrole="" dmtype="mango:EpochPosition">
+   <!-- 
+          TODO : Missing description : please, update your UML model asap.
+        " -->
+   <INSTANCE dmrole="mango:Property.semantic" dmtype="mango:VocabularyTerm">
+      <!-- 
+          TODO : Missing description : please, update your UML model asap.
+        " -->
+      <ATTRIBUTE dmrole="mango:VocabularyTerm.label" dmtype="ivoa:string" ref="@@@@@" value=""/>
+   </INSTANCE>
+   <ATTRIBUTE dmrole="mango:Property.description" dmtype="ivoa:string" ref="@@@@@" value=""/>
+   <INSTANCE dmrole="mango:Property.measure" dmtype="meas:Measure"/>
+   <ATTRIBUTE dmrole="mango:EpochPosition.longitude" dmtype="ivoa:RealQuantity" unit="" ref="@@@@@" value=""/>
+   <ATTRIBUTE dmrole="mango:EpochPosition.latitude" dmtype="ivoa:RealQuantity" unit="" ref="@@@@@" value=""/>
+   <ATTRIBUTE dmrole="mango:EpochPosition.parallax" dmtype="ivoa:RealQuantity" unit="" ref="@@@@@" value=""/>
+   <ATTRIBUTE dmrole="mango:EpochPosition.radialVelocity" dmtype="ivoa:RealQuantity" unit="" ref="@@@@@" value=""/>
+   <ATTRIBUTE dmrole="mango:EpochPosition.pmLongitude" dmtype="ivoa:RealQuantity" unit="" ref="@@@@@" value=""/>
+   <ATTRIBUTE dmrole="mango:EpochPosition.pmLatitude" dmtype="ivoa:RealQuantity" unit="" ref="@@@@@" value=""/>
+   <ATTRIBUTE dmrole="mango:EpochPosition.epoch" dmtype="ivoa:RealQuantity" unit="" ref="@@@@@" value=""/>
+   <ATTRIBUTE dmrole="mango:EpochPosition.pmCosDeltApplied" dmtype="ivoa:boolean" unit="" ref="@@@@@" value=""/>
+   <INSTANCE dmrole="mango:EpochPosition.error" dmtype="mango:MovingPositionError">
+      <!-- 
+          TODO : Missing description : please, update your UML model asap.
+        " -->
+      <!-- 
+          TODO : Missing description : please, update your UML model asap.
+         -->
+      <ATTRIBUTE dmrole="mango:MovingPositionError.positionError" dmtype="mango:ErrorTypes.PropertyError2D" ref="@@@@@" value=""/>
+      <!-- 
+          TODO : Missing description : please, update your UML model asap.
+         -->
+      <ATTRIBUTE dmrole="mango:MovingPositionError.pmError" dmtype="mango:ErrorTypes.PropertyError2D" ref="@@@@@" value=""/>
+      <!-- 
+          TODO : Missing description : please, update your UML model asap.
+         -->
+      <ATTRIBUTE dmrole="mango:MovingPositionError.parallaxError" dmtype="mango:ErrorTypes.PropertyError1D" ref="@@@@@" value=""/>
+      <!-- 
+          TODO : Missing description : please, update your UML model asap.
+         -->
+      <ATTRIBUTE dmrole="mango:MovingPositionError.radialVelocityError" dmtype="mango:ErrorTypes.PropertyError1D" ref="@@@@@" value=""/>
+      <!-- 
+          TODO : Missing description : please, update your UML model asap.
+         -->
+      <ATTRIBUTE dmrole="mango:MovingPositionError.pmPosError" dmtype="mango:ErrorTypes.CorrelatedError_A2B2" ref="@@@@@" value=""/>
+      <!-- 
+          TODO : Missing description : please, update your UML model asap.
+         -->
+      <ATTRIBUTE dmrole="mango:MovingPositionError.radialVelocityPosError" dmtype="mango:ErrorTypes.CorrelatedError_A1B2" ref="@@@@@" value=""/>
+      <!-- 
+          TODO : Missing description : please, update your UML model asap.
+         -->
+      <ATTRIBUTE dmrole="mango:MovingPositionError.parallaxPosError" dmtype="mango:ErrorTypes.CorrelatedError_A1B2" ref="@@@@@" value=""/>
+      <!-- 
+          TODO : Missing description : please, update your UML model asap.
+         -->
+      <ATTRIBUTE dmrole="mango:MovingPositionError.parallaxPmError" dmtype="mango:ErrorTypes.CorrelatedError_A1B2" ref="@@@@@" value=""/>
+   </INSTANCE>
+   <INSTANCE dmrole="mango:EpochPosition.coordSys" dmtype="coords:SpaceSys"/>
+</INSTANCE>

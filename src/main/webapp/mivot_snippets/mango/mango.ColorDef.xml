@@ -1,0 +1,7 @@
+<INSTANCE dmrole="" dmtype="mango:ColorDef">
+   <!-- 
+          TODO : Missing description : please, update your UML model asap.
+        " -->
+   <INSTANCE dmrole="mango:ColorDef.high" dmtype=":PhotFilter"/>
+   <INSTANCE dmrole="mango:ColorDef.low" dmtype=":PhotFilter"/>
+</INSTANCE>

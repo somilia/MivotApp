@@ -1,0 +1,13 @@
+<INSTANCE dmrole="" dmtype="coords:PixelSpace">
+   <!-- A PixelSpace SHALL include one or more BinnedAxis objects describing the pixel coordinate space.  A handedness value MAY be provided to specify the relative orientation of the axes.  " -->
+   <COLLECTION dmrole="coords:CoordSpace.axis">
+      <INSTANCE dmrole="" dmtype="coords:BinnedAxis">
+         <!-- Axis description for binned data, where values along the axis correspond to a bin number." -->
+         <ATTRIBUTE dmrole="coords:Axis.name" dmtype="ivoa:string" ref="@@@@@" value=""/>
+         <ATTRIBUTE dmrole="coords:BinnedAxis.length" dmtype="ivoa:nonnegativeInteger" unit="" ref="@@@@@" value=""/>
+      </INSTANCE>
+   </COLLECTION>
+   <!-- The handedness of a coordinate space.  For most cases, this will be a fixed value in the specification of the coordinate space.  We provide this element to allow this flexibility when needed.  In this document, it is used in the Pixel domain. -->
+   <!-- Enumeration datatype: supported values are left right  -->
+   <ATTRIBUTE dmrole="coords:PixelSpace.handedness" dmtype="coords:Handedness" value="OneOf left right "/>
+</INSTANCE>

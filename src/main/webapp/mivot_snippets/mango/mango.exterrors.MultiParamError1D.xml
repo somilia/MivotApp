@@ -1,0 +1,11 @@
+<INSTANCE dmrole="" dmtype="mango:exterrors.MultiParamError1D">
+   <!-- This class models errors on a one axis parameter with possible correlations with errors on associated parameters.
+A classical use-case  is an error on a radial velocity that is coupled with an error on the proper motion." -->
+   <INSTANCE dmrole="meas:Error" dmtype="meas:Error"/>
+   <ATTRIBUTE dmrole="mango:exterrors.MultiParamError.confidenceLevel" dmtype="ivoa:integer" unit="" ref="@@@@@" value=""/>
+   <ATTRIBUTE dmrole="mango:exterrors.MultiParamError.unit" dmtype="ivoa:Unit" unit="" ref="@@@@@" value=""/>
+   <COLLECTION dmrole="mango:exterrors.MultiParamError.correlatedErrors">
+      <INSTANCE dmrole="" dmtype=" exterrors.CorrelatedError1D1D"/>
+   </COLLECTION>
+   <ATTRIBUTE dmrole="mango:exterrors.MultiParamError1D.sigma" dmtype="ivoa:real" unit="" ref="@@@@@" value=""/>
+</INSTANCE>

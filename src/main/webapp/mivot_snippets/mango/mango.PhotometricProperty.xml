@@ -1,0 +1,14 @@
+<INSTANCE dmrole="" dmtype="mango:PhotometricProperty">
+   <!-- 
+          TODO : Missing description : please, update your UML model asap.
+        " -->
+   <INSTANCE dmrole="mango:Property.semantic" dmtype="mango:VocabularyTerm">
+      <!-- 
+          TODO : Missing description : please, update your UML model asap.
+        " -->
+      <ATTRIBUTE dmrole="mango:VocabularyTerm.label" dmtype="ivoa:string" ref="@@@@@" value=""/>
+   </INSTANCE>
+   <ATTRIBUTE dmrole="mango:Property.description" dmtype="ivoa:string" ref="@@@@@" value=""/>
+   <INSTANCE dmrole="mango:Property.measure" dmtype="meas:Measure"/>
+   <ATTRIBUTE dmrole="mango:PhotometricProperty.value" dmtype="ivoa:RealQuantity" unit="" ref="@@@@@" value=""/>
+</INSTANCE>

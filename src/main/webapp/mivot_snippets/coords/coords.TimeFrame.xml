@@ -1,0 +1,8 @@
+<INSTANCE dmrole="" dmtype="coords:TimeFrame">
+   <!-- A TimeFrame SHALL include a time scale and reference position.  It MAY also include a reference direction." -->
+   <!-- Put here a concrete INSTANCE of RefLocation or left blank -->
+   <INSTANCE dmrole="coords:TimeFrame.refPosition" dmtype="coords:RefLocation"/>
+   <ATTRIBUTE dmrole="coords:TimeFrame.timescale" dmtype="ivoa:string" ref="@@@@@" value=""/>
+   <!-- Put here a concrete INSTANCE of RefLocation or left blank -->
+   <INSTANCE dmrole="coords:TimeFrame.refDirection" dmtype="coords:RefLocation"/>
+</INSTANCE>

@@ -1,0 +1,7 @@
+<INSTANCE dmrole="" dmtype="mango:exterrors.Ellipse">
+   <!-- Elliptical error. The regular ellipse orientation is  East of the North
+" -->
+   <ATTRIBUTE dmrole="mango:exterrors.Ellipse.semiMajorAxis" dmtype="ivoa:real" unit="" ref="@@@@@" value=""/>
+   <ATTRIBUTE dmrole="mango:exterrors.Ellipse.semiMinorAxis" dmtype="ivoa:real" unit="" ref="@@@@@" value=""/>
+   <ATTRIBUTE dmrole="mango:exterrors.Ellipse.positionAngle" dmtype="ivoa:RealQuantity" unit="" ref="@@@@@" value=""/>
+</INSTANCE>

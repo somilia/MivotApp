@@ -1,0 +1,9 @@
+<INSTANCE dmrole="" dmtype="mango:exterrors.CorrelatedError">
+   <!-- Correlation coefficients between the error of the host parameter and one of its associated parameters.
+The host parameter is one of the \texttt{mango:Parameter} of the \texttt{mango:ParameterDock} (a position typically) of the Mango object.
+The associated parameter is one of the \texttt{mango:Parameter.associatedParameters} of that parameter (typically a proper motion)
+There is no logical link between the correlated error instance and the associated parameter it refers to.
+The associated parameter is identified by the \texttt{UCD field}. The client is in charge of solving this dependency.
+" -->
+   <ATTRIBUTE dmrole="mango:exterrors.CorrelatedError.ucd" dmtype="ivoa:string" ref="@@@@@" value=""/>
+</INSTANCE>

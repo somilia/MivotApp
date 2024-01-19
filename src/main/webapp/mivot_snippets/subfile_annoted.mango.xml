@@ -1,0 +1,10 @@
+<INSTANCE dmrole="" dmtype="mango:EpochPosition">
+  <!-- 
+          TODO : Missing description : please, update your UML model asap.
+        " -->
+  <ATTRIBUTE dmrole="mango:EpochPosition.longitude" dmtype="ivoa:RealQuantity" ref="sc_ra" unit="" value=""/>
+  <ATTRIBUTE dmrole="mango:EpochPosition.latitude" dmtype="ivoa:RealQuantity" ref="sc_dec" unit="" value=""/>
+  <ATTRIBUTE dmrole="mango:EpochPosition.pmLongitude" dmtype="ivoa:RealQuantity" ref="sc_pm_ra" unit="" value=""/>
+  <ATTRIBUTE dmrole="mango:EpochPosition.pmLatitude" dmtype="ivoa:RealQuantity" ref="sc_pm_dec" unit="" value=""/>
+  <REFERENCE dmref="FK5" dmrole="mango:EpochPosition.coordSys"/>
+</INSTANCE>

@@ -13,8 +13,8 @@ import java.net.URL;
 public class FileGetter {
 
 	private static String JSON_LOCATION = "mappingComponent/Profiles/";
-	private static String XML_LOCATION = "mappingComponent/Components/";
-	
+//	private static String XML_LOCATION = "mappingComponent/Components/";
+	private static String XML_LOCATION = "utils/";
 	public static File getJSONFile(String fileName) throws URISyntaxException{
 		System.out.println("getting the JSONfile");
 		URL resource;
@@ -35,6 +35,7 @@ public class FileGetter {
 	public static File getXMLFile(String fileName) throws URISyntaxException{
 		System.out.println("getting the XMLFile");
 		URL resource = FileGetter.class.getClassLoader().getResource(XML_LOCATION+fileName);
+//		URL resource = FileGetter.class.getClassLoader().getResource(new File("src/main/webapp/mivot_snippets/subfile_annoted.mango.xml").getAbsolutePath());
 		System.out.println("we got the XMLfile");
 		System.out.println(resource.toURI());
 		return(new File(resource.toURI()));	

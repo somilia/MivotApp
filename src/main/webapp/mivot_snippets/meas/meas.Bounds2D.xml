@@ -1,0 +1,11 @@
+<INSTANCE dmrole="" dmtype="meas:Bounds2D">
+   <!-- Provide the edges of a 2D uncertainty space.  Rather than being relative to the associated Coordinate, these represent ranges along each axis of that Coordinate space." -->
+   <COLLECTION dmrole="meas:Bounds2D.loLimit">
+      <ATTRIBUTE dmtype="ivoa:RealQuantity" unit="" ref="@@@@@" value=""/>
+      <ATTRIBUTE dmtype="ivoa:RealQuantity" unit="" ref="@@@@@" value=""/>
+   </COLLECTION>
+   <COLLECTION dmrole="meas:Bounds2D.hiLimit">
+      <ATTRIBUTE dmtype="ivoa:RealQuantity" unit="" ref="@@@@@" value=""/>
+      <ATTRIBUTE dmtype="ivoa:RealQuantity" unit="" ref="@@@@@" value=""/>
+   </COLLECTION>
+</INSTANCE>

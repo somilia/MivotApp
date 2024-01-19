@@ -1,0 +1,37 @@
+<INSTANCE dmrole="" dmtype="mango:MovingPositionError">
+   <!-- 
+          TODO : Missing description : please, update your UML model asap.
+        " -->
+   <!-- 
+          TODO : Missing description : please, update your UML model asap.
+         -->
+   <ATTRIBUTE dmrole="mango:MovingPositionError.positionError" dmtype="mango:ErrorTypes.PropertyError2D" ref="@@@@@" value=""/>
+   <!-- 
+          TODO : Missing description : please, update your UML model asap.
+         -->
+   <ATTRIBUTE dmrole="mango:MovingPositionError.pmError" dmtype="mango:ErrorTypes.PropertyError2D" ref="@@@@@" value=""/>
+   <!-- 
+          TODO : Missing description : please, update your UML model asap.
+         -->
+   <ATTRIBUTE dmrole="mango:MovingPositionError.parallaxError" dmtype="mango:ErrorTypes.PropertyError1D" ref="@@@@@" value=""/>
+   <!-- 
+          TODO : Missing description : please, update your UML model asap.
+         -->
+   <ATTRIBUTE dmrole="mango:MovingPositionError.radialVelocityError" dmtype="mango:ErrorTypes.PropertyError1D" ref="@@@@@" value=""/>
+   <!-- 
+          TODO : Missing description : please, update your UML model asap.
+         -->
+   <ATTRIBUTE dmrole="mango:MovingPositionError.pmPosError" dmtype="mango:ErrorTypes.CorrelatedError_A2B2" ref="@@@@@" value=""/>
+   <!-- 
+          TODO : Missing description : please, update your UML model asap.
+         -->
+   <ATTRIBUTE dmrole="mango:MovingPositionError.radialVelocityPosError" dmtype="mango:ErrorTypes.CorrelatedError_A1B2" ref="@@@@@" value=""/>
+   <!-- 
+          TODO : Missing description : please, update your UML model asap.
+         -->
+   <ATTRIBUTE dmrole="mango:MovingPositionError.parallaxPosError" dmtype="mango:ErrorTypes.CorrelatedError_A1B2" ref="@@@@@" value=""/>
+   <!-- 
+          TODO : Missing description : please, update your UML model asap.
+         -->
+   <ATTRIBUTE dmrole="mango:MovingPositionError.parallaxPmError" dmtype="mango:ErrorTypes.CorrelatedError_A1B2" ref="@@@@@" value=""/>
+</INSTANCE>

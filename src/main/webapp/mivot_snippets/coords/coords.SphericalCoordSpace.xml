@@ -1,0 +1,10 @@
+<INSTANCE dmrole="" dmtype="coords:SphericalCoordSpace">
+   <!-- Spatial domain, three-dimensional spherical coordinate space.  The particulars of the axis descriptions depend on the flavor of space being instantiated.  In Appendix B., we provide a Standard Spherical Coordinate Space instance which applies to many Astronomical use cases.  It provides the default space for SpaceSys instances, and may be referenced in serializations." -->
+   <COLLECTION dmrole="coords:CoordSpace.axis">
+      <INSTANCE dmrole="" dmtype="coords:BinnedAxis">
+         <!-- Axis description for binned data, where values along the axis correspond to a bin number." -->
+         <ATTRIBUTE dmrole="coords:Axis.name" dmtype="ivoa:string" ref="@@@@@" value=""/>
+         <ATTRIBUTE dmrole="coords:BinnedAxis.length" dmtype="ivoa:nonnegativeInteger" unit="" ref="@@@@@" value=""/>
+      </INSTANCE>
+   </COLLECTION>
+</INSTANCE>

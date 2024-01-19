@@ -1,0 +1,4 @@
+<INSTANCE dmrole="" dmtype="coords:MJD">
+   <!-- Extension of TimeInstant for time expressed in Modified Julian Days.  T(MJD) = T(JD) - 2400000.5." -->
+   <ATTRIBUTE dmrole="coords:MJD.date" dmtype="ivoa:real" unit="" ref="@@@@@" value=""/>
+</INSTANCE>

@@ -1,0 +1,4 @@
+<INSTANCE dmrole="" dmtype="coords:JD">
+   <!-- Extension of TimeInstant for time expressed in Julian days.  Note that JD does not properly specify a time stamp unless it is related to a time scale and reference position.  Precision can easily become an issue with JD, as the numbers tend to be large." -->
+   <ATTRIBUTE dmrole="coords:JD.date" dmtype="ivoa:real" unit="" ref="@@@@@" value=""/>
+</INSTANCE>

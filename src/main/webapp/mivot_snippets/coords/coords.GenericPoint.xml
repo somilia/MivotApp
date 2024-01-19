@@ -1,0 +1,6 @@
+<INSTANCE dmrole="" dmtype="coords:GenericPoint">
+   <!-- GenericPoint supports the representation of spatial coordinates in a custom coordinate space, or any space which is not covered by the other specializations.   The coordinate values map, in order, to the axes described by the associated CoordSpace.  If no CoordSpace is provided, the behavior is undefined.  Values for unused/undefined dimensions need not be provided." -->
+   <ATTRIBUTE dmrole="coords:GenericPoint.axis1" dmtype="ivoa:Quantity" unit="" ref="@@@@@" value=""/>
+   <ATTRIBUTE dmrole="coords:GenericPoint.axis2" dmtype="ivoa:Quantity" unit="" ref="@@@@@" value=""/>
+   <ATTRIBUTE dmrole="coords:GenericPoint.axis3" dmtype="ivoa:Quantity" unit="" ref="@@@@@" value=""/>
+</INSTANCE>

@@ -1,0 +1,6 @@
+<INSTANCE dmrole="" dmtype="coords:TimeOffset">
+   <!-- Time is given as an offset from a specific point in time (time0)." -->
+   <ATTRIBUTE dmrole="coords:TimeOffset.time" dmtype="ivoa:RealQuantity" unit="" ref="@@@@@" value=""/>
+   <!-- Put here a concrete INSTANCE of TimeInstant or left blank -->
+   <INSTANCE dmrole="coords:TimeOffset.time0" dmtype="coords:TimeInstant"/>
+</INSTANCE>

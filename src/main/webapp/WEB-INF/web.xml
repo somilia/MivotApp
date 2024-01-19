@@ -9,6 +9,17 @@
         <servlet-name>MyTAP</servlet-name>
         <url-pattern>/tap/*</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <display-name>MivotTap</display-name>
+        <servlet-name>MivotTap</servlet-name>
+        <servlet-class>com.example.mivotapp.MivotTap</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MivotTap</servlet-name>
+        <url-pattern>/mivot-tap/*</url-pattern>
+    </servlet-mapping>
+
     <resource-ref>
         <res-ref-name>jdbc/myDatasource</res-ref-name>
         <res-type>javax.sql.DataSource</res-type>

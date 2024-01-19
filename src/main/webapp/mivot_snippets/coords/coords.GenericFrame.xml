@@ -1,0 +1,6 @@
+<INSTANCE dmrole="" dmtype="coords:GenericFrame">
+   <!-- The generic coordinate frame is for cases where a domain-specific frame (e.g.: Space, Time), is not required, but the relevant reference metadata is still needed (e.g.: for Redshift or Spectral data)" -->
+   <!-- Put here a concrete INSTANCE of RefLocation or left blank -->
+   <INSTANCE dmrole="coords:GenericFrame.refPosition" dmtype="coords:RefLocation"/>
+   <ATTRIBUTE dmrole="coords:GenericFrame.planetaryEphem" dmtype="ivoa:string" ref="@@@@@" value=""/>
+</INSTANCE>

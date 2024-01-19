@@ -1,0 +1,12 @@
+<INSTANCE dmrole="" dmtype="meas:Ellipsoid">
+   <!-- Ellipsoidal uncertainty shape." -->
+   <COLLECTION dmrole="meas:Ellipsoid.semiAxis">
+      <ATTRIBUTE dmtype="ivoa:RealQuantity" unit="" ref="@@@@@" value=""/>
+      <ATTRIBUTE dmtype="ivoa:RealQuantity" unit="" ref="@@@@@" value=""/>
+      <ATTRIBUTE dmtype="ivoa:RealQuantity" unit="" ref="@@@@@" value=""/>
+   </COLLECTION>
+   <COLLECTION dmrole="meas:Ellipsoid.posAngle">
+      <ATTRIBUTE dmtype="ivoa:RealQuantity" unit="" ref="@@@@@" value=""/>
+      <ATTRIBUTE dmtype="ivoa:RealQuantity" unit="" ref="@@@@@" value=""/>
+   </COLLECTION>
+</INSTANCE>

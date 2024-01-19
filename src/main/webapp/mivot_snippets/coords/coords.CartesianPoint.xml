@@ -1,0 +1,7 @@
+<INSTANCE dmrole="" dmtype="coords:CartesianPoint">
+   <!-- A spatial coordinate in a Cartesian coordinate space.  Any associated CoordSpace MUST be a CartesianCoordSpace.  If no CoordSpace is provided, a Standard Cartesian CoordSpace is assumed.  Values for unused/undefined dimensions need not be provided.
+" -->
+   <ATTRIBUTE dmrole="coords:CartesianPoint.x" dmtype="ivoa:Quantity" unit="" ref="@@@@@" value=""/>
+   <ATTRIBUTE dmrole="coords:CartesianPoint.y" dmtype="ivoa:Quantity" unit="" ref="@@@@@" value=""/>
+   <ATTRIBUTE dmrole="coords:CartesianPoint.z" dmtype="ivoa:Quantity" unit="" ref="@@@@@" value=""/>
+</INSTANCE>

@@ -1,8 +1,12 @@
-package ModelBase;
+package ModelBaseInit;
 import java.util.ArrayList;
 import java.util.Collections;
 
 public class QueryBuilder {
+    /** This class is used to build the query to get the mapped column from the table
+     * Columns in <model>_mivot are the followings:
+     * ["instance_id", "mapped_table", "mapped_column", "dmtype", "dmrole", "dmerror", "frame", "ucd", "vocab", "mandatory"]
+     **/
     String table;
     String model;
     ArrayList<String> columns_from_query;
@@ -28,9 +32,17 @@ public class QueryBuilder {
     public String getMandatoryColumnsQuery(String dmtype) {
         return this.getQuery("mapped_column") + " AND mandatory = 'true' AND dmtype = '" + dmtype + "'";
     }
-    //"SELECT mapped_column FROM mango_mivot WHERE mapped_table = ? AND dmtype = '" + dmtype + "' AND mapped_column IN (" + String.join(", ", Collections.nCopies(columns_from_query.size(), "?")) + ")";
+
     public String getMappedColumnQuery(String dmtype) {
         return this.getQuery("mapped_column") + " AND dmtype = '" + dmtype + "' AND mapped_column IN ("
                 + String.join(", ", Collections.nCopies(columns_from_query.size(), "?")) + ")";
+    }
+
+    public String getDmroleQuery(String dmtype, String mapped_column) {
+        return this.getQuery("dmrole") + " AND dmtype = '" + dmtype + "' AND mapped_column = '"+ mapped_column +"'";
+    }
+
+    public String getFrameQuery() {
+        return this.getQuery("frame") + " AND mapped_column IN (" + String.join(", ", Collections.nCopies(columns_from_query.size(), "?")) + ")";
     }
 }

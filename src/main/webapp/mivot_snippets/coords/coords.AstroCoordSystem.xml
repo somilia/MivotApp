@@ -1,0 +1,7 @@
+<INSTANCE dmrole="" dmtype="coords:AstroCoordSystem">
+   <!-- The AstroCoordSystem object holds a collection of component coordinate system descriptions across all represented physical domains." -->
+   <COLLECTION dmrole="coords:AstroCoordSystem.coordSys">
+      <!-- Put here a concrete INSTANCE of PhysicalCoordSys or left blank -->
+      <INSTANCE dmrole="" dmtype="coords:PhysicalCoordSys"/>
+   </COLLECTION>
+</INSTANCE>

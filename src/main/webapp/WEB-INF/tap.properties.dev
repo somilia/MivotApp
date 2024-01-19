@@ -1,26 +1,26 @@
-database_access = jdbc
+# Every line starting with a # character is a comment.
+# A configuration item is called a property and is set using a key with a value, both separated with a =, like below:
+key = value
+database_access = jndi
 datasource_jndi_name = java:/comp/env/jdbc/myDatasource
 sql_translator = postgres
+sql_translator=pgsphere
 
 #for TAP_SCHEMA : add TAP_SCHEMA
 #metadata = xml
 #metadata_file = WEB-INF/tables.xml
 
-
-jdbc_url = jdbc:postgresql://localhost:5432/mivot_db
-db_username = saadmin
-db_password =
-
 #for TAP_SCHEMA : with sql
 metadata=db
 
-
 #ajout de base ou root url
-#base_url = https://localhost:5432/tap/
-jdbc_driver=org.postgresql.Driver
-
+base_url = https://localhost:5432/tap/
 file_manager = local
 file_root_path = Tapfiles
+jdbc_driver=org.postgresql.Driver
+
+default_execution_duration = 3600000
+output_default_limit =10
 #add output_formats
 output_formats={vollt_tuning.MangoFormat}, fits, csv, tsv, text, html, json
 

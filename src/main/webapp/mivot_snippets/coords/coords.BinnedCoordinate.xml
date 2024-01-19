@@ -1,0 +1,7 @@
+<INSTANCE dmrole="" dmtype="coords:BinnedCoordinate">
+   <!-- Coordinate value type specifically intended for binned data (e.g.: pixel indexes).
+" -->
+   <!-- Put here a concrete INSTANCE of CoordSys or left blank -->
+   <INSTANCE dmrole="coords:Coordinate.coordSys" dmtype="coords:CoordSys"/>
+   <ATTRIBUTE dmrole="coords:BinnedCoordinate.cval" dmtype="ivoa:integer" unit="" ref="@@@@@" value=""/>
+</INSTANCE>

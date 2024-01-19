@@ -1,0 +1,9 @@
+<INSTANCE dmrole="" dmtype="coords:CustomRefLocation">
+   <!-- A custom reference location in phase space (position and velocity).  Position and velocity are given as coordinates with an associated SpaceFrame.  An epoch MAY be provided to further refine the location." -->
+   <!-- We define epoch as a primitive data type with the expected form "<type><year>" where type = "J" or "B" for Julian or Besselian respectively, and year is expressed as a decimal year.  e.g.: "B1950", "J2000.0" -->
+   <ATTRIBUTE dmrole="coords:CustomRefLocation.epoch" dmtype="coords:Epoch" ref="@@@@@" value=""/>
+   <!-- Put here a concrete INSTANCE of Point or left blank -->
+   <INSTANCE dmrole="coords:CustomRefLocation.position" dmtype="coords:Point"/>
+   <!-- Put here a concrete INSTANCE of Point or left blank -->
+   <INSTANCE dmrole="coords:CustomRefLocation.velocity" dmtype="coords:Point"/>
+</INSTANCE>

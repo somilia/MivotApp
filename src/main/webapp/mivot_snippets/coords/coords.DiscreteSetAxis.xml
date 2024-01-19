@@ -1,0 +1,4 @@
+<INSTANCE dmrole="" dmtype="coords:DiscreteSetAxis">
+   <!-- Axis type specifically intended for enumerated coordinates.  Since the content and nature of this axis type is heavily dependent on the use case, we define no additional metadata here.  Extensions of this type may include additional metadata relevant to the particular use cases.  For example, an extension could include the allowed set of values." -->
+   <ATTRIBUTE dmrole="coords:Axis.name" dmtype="ivoa:string" ref="@@@@@" value=""/>
+</INSTANCE>

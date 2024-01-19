@@ -1,0 +1,5 @@
+<INSTANCE dmrole="" dmtype="coords:PixelIndex">
+   <!-- Specialized BinnedCoordinate for the pixel domain for a 1-dimensional pixel index.  PixelIndex MUST refer to a PixelCoordSystem.
+" -->
+   <ATTRIBUTE dmrole="coords:BinnedCoordinate.cval" dmtype="ivoa:integer" unit="" ref="@@@@@" value=""/>
+</INSTANCE>

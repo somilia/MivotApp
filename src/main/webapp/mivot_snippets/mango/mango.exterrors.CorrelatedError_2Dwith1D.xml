@@ -1,0 +1,7 @@
+<INSTANCE dmrole="" dmtype="mango:exterrors.CorrelatedError_2Dwith1D">
+   <!-- Correlation coefficients between the error of a 1D host parameter and a 2D associated parameters.
+" -->
+   <ATTRIBUTE dmrole="mango:exterrors.CorrelatedError.ucd" dmtype="ivoa:string" ref="@@@@@" value=""/>
+   <ATTRIBUTE dmrole="mango:exterrors.CorrelatedError_1Dwith1D.correlation1_1" dmtype="ivoa:real" unit="" ref="@@@@@" value=""/>
+   <ATTRIBUTE dmrole="mango:exterrors.CorrelatedError_2Dwith1D.correlation2_1" dmtype="ivoa:real" unit="" ref="@@@@@" value=""/>
+</INSTANCE>

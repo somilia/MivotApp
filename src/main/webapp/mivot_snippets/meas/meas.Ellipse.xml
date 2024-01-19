@@ -1,0 +1,8 @@
+<INSTANCE dmrole="" dmtype="meas:Ellipse">
+   <!-- Elliptical uncertainty shape." -->
+   <COLLECTION dmrole="meas:Ellipse.semiAxis">
+      <ATTRIBUTE dmtype="ivoa:RealQuantity" unit="" ref="@@@@@" value=""/>
+      <ATTRIBUTE dmtype="ivoa:RealQuantity" unit="" ref="@@@@@" value=""/>
+   </COLLECTION>
+   <ATTRIBUTE dmrole="meas:Ellipse.posAngle" dmtype="ivoa:RealQuantity" unit="" ref="@@@@@" value=""/>
+</INSTANCE>

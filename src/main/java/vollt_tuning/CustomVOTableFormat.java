@@ -1,25 +1,8 @@
 package vollt_tuning;
 
 import java.io.*;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.regex.Pattern;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.*;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathFactory;
-
-import adql.db.DBColumn;
-import adql.db.SearchColumnList;
-import adql.parser.ParseException;
-import adql.query.ADQLObject;
 import adql.query.SelectAllColumns;
 import adql.query.SelectItem;
 import adql.query.operand.ADQLColumn;
@@ -27,20 +10,11 @@ import tap.ServiceConnection;
 import tap.TAPException;
 import tap.TAPExecutionReport;
 import tap.formatter.VOTableFormat;
-import tap.metadata.TAPColumn;
-import tap.metadata.TAPCoosys;
-import mapper.ProductMapper;
-import model.AnnotationBuilder;
+//import model.AnnotationBuilder;
 import uk.ac.starlink.votable.DataFormat;
 import uk.ac.starlink.votable.VOSerializer;
 import uk.ac.starlink.votable.VOTableVersion;
-import utils.FileGetter;
 import uws.service.log.UWSLog.LogLevel;
-
-import org.w3c.dom.*;
-import org.w3c.dom.traversal.*;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 public class CustomVOTableFormat extends VOTableFormat {
 
@@ -61,7 +35,7 @@ public class CustomVOTableFormat extends VOTableFormat {
 	 *   ci-dessous sera appelé.
 	 */
 	
-	MappingBuilder mapBuild;
+	//MappingBuilder mapBuild;
 	public CustomVOTableFormat(final ServiceConnection service) throws NullPointerException {
 		//super(service);                                             // Serialisation et version par défaut: BINARY et 1.3
 		super(service, DataFormat.TABLEDATA);                     // Pour préciser une sérialisation différente
@@ -111,8 +85,9 @@ public class CustomVOTableFormat extends VOTableFormat {
 
 			tableName = this.service.getFactory().createADQLParser().parseQuery(query).getFrom().getName();
 			this.service.getLogger().log(LogLevel.INFO, "IHSANE", tableName, null);
-			boolean tableExist = AnnotationBuilder.tableExist(tableName);
-			
+//			boolean tableExist = AnnotationBuilder.tableExist(tableName);
+			boolean tableExist = true;
+
 			//si la table existe
 			if(tableExist ==true) {
 
@@ -132,9 +107,10 @@ public class CustomVOTableFormat extends VOTableFormat {
 				}
 				this.service.getLogger().log(LogLevel.INFO, "IHSANE", "test 4 : affiché? ", null);
 	
-				AnnotationBuilder annotationBuilder = new AnnotationBuilder(tableName,column_names,out);
+				//AnnotationBuilder annotationBuilder = new AnnotationBuilder(tableName,column_names,out);
 				System.out.println("ca marche ");
-				annotationBuilder.writeAnnotations("result_" + execReport.jobID);
+				System.out.println(column_names);
+				//annotationBuilder.writeAnnotations("result_" + execReport.jobID);
 			
 				//Faire des test pour voir si ca marche toujours pas
 				//this.service.getLogger().log(LogLevel.INFO, "Generate XML block", annotationBuilder.generateXMLblock(), null); //affiché
@@ -142,13 +118,13 @@ public class CustomVOTableFormat extends VOTableFormat {
 			}
 			else {
 				this.service.getLogger().log(LogLevel.INFO, "IHSANE","la table n'existe pas " , null);
-				out.write(AnnotationBuilder.buildFailedTableAnnotation(tableName));
+				//out.write(AnnotationBuilder.buildFailedTableAnnotation(tableName));
 			}
 
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			//report avec buildFailedAnnotation.
-			StringWriter errors = new StringWriter(); 
+			StringWriter errors = new StringWriter();
 			e1.printStackTrace(new PrintWriter(errors)); 
 			out.write(CustomVOTableFormat.buildFailedAnnotation(errors.toString()));
 
@@ -156,7 +132,7 @@ public class CustomVOTableFormat extends VOTableFormat {
 		
 		//out.newLine();
 
-		
+		/**
 	
 
 		// Indicate that the query has been successfully processed:	[REQUIRED]
@@ -209,7 +185,7 @@ public class CustomVOTableFormat extends VOTableFormat {
 			}
 		}
 		
-		
+		**/
 		/* ******************************************************************
 		   *                                                                *
 		   * NOTE:                                                          *
@@ -219,7 +195,7 @@ public class CustomVOTableFormat extends VOTableFormat {
 
 		out.flush();
 	}
-	
+
 
 
 	/**
@@ -228,6 +204,7 @@ public class CustomVOTableFormat extends VOTableFormat {
 	 * 
 	 * This method is used to convert an xml Document to a String
 	 */
+	/**
 	public static String xmlToString(Document doc) {
 		
 	    String xmlString = null;
@@ -259,6 +236,7 @@ public class CustomVOTableFormat extends VOTableFormat {
 	 * @param indent the number of indentations we want
 	 * @return a beautified XML string
 	 */
+/**
 	public static String toPrettyString(String xml, int indent) {
 	    try {
 	        // Turn xml string into a document
@@ -293,15 +271,16 @@ public class CustomVOTableFormat extends VOTableFormat {
 	    } catch (Exception e) {
 	        throw new RuntimeException(e);
 	    }
-	}
+	}**/
 	
 	public static String buildFailedAnnotation(Object object) {
-		String mappBuildError = new MappingBuilder().getMapping();
+		//String mappBuildError = new MappingBuilder().getMapping();
 		String vodml = "<VODML xmlns=\"http://ivoa.net/xml/merged-synthax\">\n";
 		String report = "<REPORT status=\"KO\">";
 		
 		String endOfMapp = "</REPORT>\n</VODML>\n";
-		mappBuildError += vodml + report + object + endOfMapp;
+		//mappBuildError += vodml + report + object + endOfMapp;
+		String mappBuildError = vodml + report + object + endOfMapp;
 
 		return mappBuildError;
 	}

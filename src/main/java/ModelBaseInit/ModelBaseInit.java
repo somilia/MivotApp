@@ -1,10 +1,10 @@
-package ModelBase;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+package ModelBaseInit;
+import TAPConnection.MivotTAPFactory;
+import TAPConnection.MivotTap;
+import tap.TAPException;
+
+import java.util.*;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -13,44 +13,56 @@ import java.sql.PreparedStatement;
 
 
 public class ModelBaseInit {
-    public ModelBase ModelBase;
-    QueryBuilder queryBuilder;
-    // JDBC driver name and database URL
-    private static String jdbcUrl; //= "jdbc:postgresql://localhost:5432/mivot_db";
-    private static String username;// = "saadmin"; // requete driver postgres sur vollt
-    private static String password; //= "";
 
-    // Load the JDBC driver
-    static {
-        try {
-            Class.forName("org.postgresql.Driver");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-    public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(jdbcUrl, username, password);
+    public MivotTap mivotTap = new MivotTap();
+
+    public ModelBaseInit(){
+        /** Default constructor **/
+
     }
 
-    public ModelBaseInit(String table, String model, ArrayList<String> columns_from_query, String jdbcUrl, String username, String password) {
-        this.jdbcUrl = jdbcUrl;
-        this.username = username;
-        this.password = password;
+    public ModelBase getModelBase(String table, String model, ArrayList<String> columns_from_query) throws TAPException {
         /** This method is used to initialize the ModelBase **/
-        this.queryBuilder = new QueryBuilder(table, model, columns_from_query);
-        Map<String, List<String>> mappeable = new HashMap<>();
-
+        ModelBase modelBase = null;
+        QueryBuilder queryBuilder = new QueryBuilder(table, model, columns_from_query);
+        Map<String, List<String>> mappeable;
+        mivotTap.init();
         try (Connection connection = getConnection()) {
             mappeable = this.getMappeableDmtype(connection, queryBuilder);
-            this.ModelBase = new ModelBase(mappeable);
-
-        } catch (SQLException e) {
+            modelBase = new ModelBase(mappeable);
+            Set<String> dmtype_list = mappeable.keySet();
+//            checkForFrame(connection, queryBuilder, modelBase);
+            for (String dmtype : dmtype_list) {
+                for (String mapped_column : mappeable.get(dmtype)) {
+                    modelBase.addToDmtype(dmtype.replace("_",":"), getDmrole(connection, dmtype.replace(":","_"), mapped_column, queryBuilder).get(0).replace("_",":"), mapped_column);
+                }
+            }
+            System.out.println("\nDictionary of dmtype: "+modelBase.dmtype_dict);
+            freeConnection();
+        } catch (TAPException | SQLException e) {
             e.printStackTrace();
         }
+        return modelBase;
+    }
+
+    public static Connection getConnection() throws SQLException, TAPException {
+
+        if (MivotTAPFactory.getJDBCConnection().isEmpty()) {
+            throw new TAPException("Unable to get a connection to the database");
+        }
+        if (MivotTAPFactory.getJDBCConnection().isPresent()) {
+            return MivotTAPFactory.getJDBCConnection().get().getInnerConnection();
+        } else
+            throw new TAPException("Unable to get a connection to the database");
+    }
+
+    public static void freeConnection() throws TAPException {
+        MivotTAPFactory.freeJDBCConnection(MivotTAPFactory.getJDBCConnection().get());
     }
 
     public Map<String, List<String>> getMappeableDmtype(Connection connection, QueryBuilder queryBuilder) {
-        /** Get a list of all dmtype that can be mapped from the table **/
+        /** Get a list of all dmtype that can be mapped from the table
+         * mappeable format : {dmtype : [column1, column2, ...], ...} **/
 
         Map<String, List<String>> mappeable = new HashMap<>();
         ArrayList<String> dmtype_mappeable = new ArrayList<String>();
@@ -83,7 +95,7 @@ public class ModelBaseInit {
                 dmtype_to_remove.add(dmtype);
             } else {
                 List<String> possibleColumns = getAllPossibleColumns(connection, dmtype, queryBuilder);
-                mappeable.put(dmtype, possibleColumns);
+                mappeable.put(dmtype.replace("_",":"), possibleColumns);
             }
 
         }
@@ -131,6 +143,26 @@ public class ModelBaseInit {
         return table_columns;
     }
 
+    private ArrayList<String> getDmrole(Connection connection, String dmtype, String mapped_column, QueryBuilder queryBuilder) {
+        /** Get a list of all dmroles from the model for a specific dmtype **/
+        return executeMivotQuery(queryBuilder.getDmroleQuery(dmtype, mapped_column), connection);
+
+    }
+//    private void checkForFrame(Connection connection, QueryBuilder queryBuilder, ModelBase modelBase) {
+//        /** Check if the frame is present in the query in 2 possible cases :
+//         * - the frame is present in the columns of the query
+//         * - the frame is not present in the query but columns of the query require a frame : LonLatPos
+//         *  **/
+//        if (queryBuilder.columns_from_query.contains("frame") || queryBuilder.columns_from_query.contains("equinox") || queryBuilder.columns_from_query.contains("epoch")) {
+//            ArrayList<String> frame_list = executeMivotQuery(queryBuilder.getFrameQuery(), connection);
+//            if (!frame_list.isEmpty()) {
+//                modelBase.addToFrame("frame", frame_list.get(0));
+//            }
+//        } else if (queryBuilder.columns_from_query.contains("sc_ra") || queryBuilder.columns_from_query.contains("sc_dec") || queryBuilder.columns_from_query.contains("sc_err_min")) {
+//            modelBase.error.add("frame");
+//        }
+//    }
+
     public static ArrayList<String> PrepareAndExecuteStatement(String query, Connection connection, ArrayList<String> parameters_from_query){
         /** Prepare and execute a query with parameters **/
         ArrayList<String> result = new ArrayList<String>();
@@ -157,7 +189,7 @@ public class ModelBaseInit {
                 resultSet = statement.executeQuery(querySQL);          // we execute and treat the ResultSet
 //                System.out.println("-- Executing query -- : " + querySQL);
                 listResult = getListResult(resultSet);
-            } else {
+            } else { // TODO : what to do in case of other query type ?
                 int rowCount = statement.executeUpdate(querySQL);
                 System.out.println("Nombre de lignes affectées : " + rowCount);
             }
@@ -188,17 +220,14 @@ public class ModelBaseInit {
         return listResult;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws TAPException {
         ArrayList<String> col_to_query = new ArrayList<>();
         col_to_query.add("sc_ra");
         col_to_query.add("sc_pm_ra");
         col_to_query.add("sc_dec");
         col_to_query.add("sc_err_min");
-        try (Connection connection = getConnection()) {
+        ModelBaseInit modelbaseInit = new ModelBaseInit();
+        modelbaseInit.getModelBase("epic_src","mango", col_to_query);
 
-            ModelBaseInit ModelbaseInit = new ModelBaseInit("epic_src","mango", col_to_query, "jdbc:postgresql://localhost:5432/mivot_db", "saadmin", "");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 }

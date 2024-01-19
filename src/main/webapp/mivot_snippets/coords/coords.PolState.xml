@@ -1,0 +1,8 @@
+<INSTANCE dmrole="" dmtype="coords:PolState">
+   <!-- Coordinate type for discrete polarization states.
+" -->
+   <!-- Polarization states: Stokes, Circular, Linear and Vector states
+ -->
+   <!-- Enumeration datatype: supported values are I Q U V RR LL RL LR XX YY XY YX PF PP PA  -->
+   <ATTRIBUTE dmrole="coords:PolState.cval" dmtype="coords:PolStateEnum" value="OneOf I Q U V RR LL RL LR XX YY XY YX PF PP PA "/>
+</INSTANCE>
