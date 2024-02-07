@@ -1,0 +1,38 @@
+<INSTANCE dmrole="" dmtype="mango:PhysicalProperty">
+   <!-- 
+          TODO : Missing description : please, update your UML model asap.
+        " -->
+   <INSTANCE dmrole="mango:Property.semantic" dmtype="mango:VocabularyTerm">
+      <!-- 
+          TODO : Missing description : please, update your UML model asap.
+        " -->
+      <ATTRIBUTE dmrole="mango:VocabularyTerm.label" dmtype="ivoa:string" ref="@@@@@" value=""/>
+   </INSTANCE>
+   <ATTRIBUTE dmrole="mango:Property.description" dmtype="ivoa:string" ref="@@@@@" value=""/>
+   <!--<INSTANCE dmrole="mango:Property.measure" dmtype="meas:Measure"/>-->
+   <!-- Science ready data with the instrument signature removed (ObsCore). -->
+   <!-- Enumeration datatype: supported values are Raw Instrumental Calibrated  -->
+   <ATTRIBUTE dmrole="mango:PhysicalProperty.calibrationLevel" dmtype="mango:CalibrationLevel" value="OneOf Raw Instrumental Calibrated "/>
+
+   <INSTANCE dmrole="mango:PhysicalProperty.measure" dmtype="meas:Position">
+      <!-- Provides a complete description of a measured positional instant." -->
+      <ATTRIBUTE dmrole="meas:Measure.ucd" dmtype="ivoa:string" ref="@@@@@" value=""/>
+      <INSTANCE dmrole="meas:Measure.error" dmtype="meas:Error">
+         <!-- The Error class uses the Uncertainty types to describe measurement errors from various sources." -->
+         <!-- Put here a concrete INSTANCE of Uncertainty or left blank -->
+         <INSTANCE dmrole="meas:Error.statError" dmtype="meas:Uncertainty"/>
+         <!-- Put here a concrete INSTANCE of Uncertainty or left blank -->
+         <INSTANCE dmrole="meas:Error.sysError" dmtype="meas:Uncertainty"/>
+      </INSTANCE>
+
+      <INSTANCE dmrole="meas:Position.coord" dmtype="coords:LonLatPoint">
+         <!-- A spatial coordinate in a Spherical coordinate space defining a Celestial position in Latitude and Longitude.  Any associated CoordSpace MUST conform to this description.  If no CoordSpace is provided, a Standard Spherical CoordSpace is assumed.  Values for unused/undefined dimensions need not be provided.
+      " -->
+         <ATTRIBUTE dmrole="coords:LonLatPoint.lon" dmtype="ivoa:Quantity" unit="" ref="@@@@@" value=""/>
+         <ATTRIBUTE dmrole="coords:LonLatPoint.lat" dmtype="ivoa:Quantity" unit="" ref="@@@@@" value=""/>
+         <ATTRIBUTE dmrole="coords:LonLatPoint.dist" dmtype="ivoa:Quantity" unit="" ref="@@@@@" value=""/>
+         <REFERENCE dmrole="coords:Coordinate.coordSys" dmref="@@@@@@" />
+      </INSTANCE>
+   </INSTANCE>
+
+</INSTANCE>

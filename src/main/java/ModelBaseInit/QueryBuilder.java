@@ -21,7 +21,7 @@ public class QueryBuilder {
     public String getQuery(String column_quiered) {
         /** This method is used to build the query to get the mapped column from the table **/
         String query = "SELECT " + column_quiered;
-        query += " FROM " + model + "_mivot WHERE mapped_table = '" + table + "'";
+        query += " FROM \"TAP_SCHEMA\"." + model + "_mivot WHERE mapped_table = '" + table + "'";
         return query;
     }
 
@@ -42,7 +42,21 @@ public class QueryBuilder {
         return this.getQuery("dmrole") + " AND dmtype = '" + dmtype + "' AND mapped_column = '"+ mapped_column +"'";
     }
 
-    public String getFrameQuery() {
-        return this.getQuery("frame") + " AND mapped_column IN (" + String.join(", ", Collections.nCopies(columns_from_query.size(), "?")) + ")";
+    public String getFrameQuery(String dmtype) {
+        return this.getQuery("frame") + " AND dmtype = '" + dmtype + "'";// AND mapped_column = '"+ mapped_column +"'";
+    }
+
+    public String getErrorQuery(String dmtype) {
+        return this.getQuery("instance_id") + " AND dmtype = '" + dmtype + "' AND property = 'error'";
+    }
+    public String getFromDmErrorQuery(String dmerror) {
+        return this.getQuery("dmtype") + " AND dmerror = '" + dmerror + "'";
+    }
+
+    public String getInstanceIDQuery(String dmtype, String mapped_column) {
+        return this.getQuery("instance_id") + " AND dmtype = '" + dmtype + "' AND mapped_column = '"+ mapped_column +"'";
+    }
+    public String getSnippetQuery(String dmtype) {
+        return this.getQuery("snippet") + " AND dmtype = '" + dmtype + "'";
     }
 }

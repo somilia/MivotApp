@@ -5,8 +5,8 @@
   <title>JSP - Mivot TAP</title>
 </head>
 <body>
-<h1><%= "MivotApp" %></h1>
+<h1><%= "TAP" %></h1>
 <br/>
-<a href="mivot-tap">Mivot TAP</a>
+<a href="tap">TAP</a>
 </body>
 </html>

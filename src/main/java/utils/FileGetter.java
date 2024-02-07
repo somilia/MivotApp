@@ -13,8 +13,8 @@ import java.net.URL;
 public class FileGetter {
 
 	private static String JSON_LOCATION = "mappingComponent/Profiles/";
-//	private static String XML_LOCATION = "mappingComponent/Components/";
-	private static String XML_LOCATION = "utils/";
+	private static String XML_LOCATION = "mivot_snippets/";
+
 	public static File getJSONFile(String fileName) throws URISyntaxException{
 		System.out.println("getting the JSONfile");
 		URL resource;
@@ -33,12 +33,16 @@ public class FileGetter {
 	}
 	
 	public static File getXMLFile(String fileName) throws URISyntaxException{
-		System.out.println("getting the XMLFile");
+		System.out.println("getting the XMLFile : " + fileName);
 		URL resource = FileGetter.class.getClassLoader().getResource(XML_LOCATION+fileName);
-//		URL resource = FileGetter.class.getClassLoader().getResource(new File("src/main/webapp/mivot_snippets/subfile_annoted.mango.xml").getAbsolutePath());
-		System.out.println("we got the XMLfile");
-		System.out.println(resource.toURI());
-		return(new File(resource.toURI()));	
+		System.out.println((new File(String.valueOf(FileGetter.class.getClassLoader().getResource(XML_LOCATION))).getAbsolutePath()));
+		if (resource == null) {
+			System.out.println("resource is null, XML file not found");
+			return null;
+		}else {
+			System.out.println("we got the XMLfile" + resource.toURI());
+			return(new File(resource.toURI()));
+		}
 	}
 	
 	public static String getFileResource(String fileName) throws URISyntaxException {

@@ -23,6 +23,7 @@ tasks.withType(JavaCompile) {
 
 dependencies {
   compileOnly('jakarta.servlet:jakarta.servlet-api:5.0.0')
+  implementation 'javax.servlet:javax.servlet-api:3.0.1'
   implementation fileTree(dir: 'lib', includes: ['vollt.jar'])
   // https://mvnrepository.com/artifact/org.postgresql/postgresql
   implementation 'org.postgresql:postgresql:42.2.12'

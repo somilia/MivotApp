@@ -13,7 +13,7 @@
     <servlet>
         <display-name>MivotTap</display-name>
         <servlet-name>MivotTap</servlet-name>
-        <servlet-class>com.example.mivotapp.MivotTap</servlet-class>
+        <servlet-class>com.example.mivotapp</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>MivotTap</servlet-name>

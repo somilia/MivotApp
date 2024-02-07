@@ -1,0 +1,3 @@
+<INSTANCE ID="SpaceFrame_ICRS" dmtype="coords:SpaceFrame">
+    <ATTRIBUTE dmrole="coords:SpaceFrame.spaceRefFrame" dmtype="ivoa:string" value="ICRS"/>
+</INSTANCE>

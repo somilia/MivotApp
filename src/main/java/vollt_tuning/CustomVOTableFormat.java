@@ -1,20 +1,32 @@
 package vollt_tuning;
 
 import java.io.*;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.Objects;
 
+import MangoMivotBuild.MangoMivotBuilder;
 import adql.query.SelectAllColumns;
 import adql.query.SelectItem;
 import adql.query.operand.ADQLColumn;
+import org.xml.sax.SAXException;
 import tap.ServiceConnection;
 import tap.TAPException;
 import tap.TAPExecutionReport;
+import tap.config.ConfigurableServiceConnection;
 import tap.formatter.VOTableFormat;
 //import model.AnnotationBuilder;
 import uk.ac.starlink.votable.DataFormat;
 import uk.ac.starlink.votable.VOSerializer;
 import uk.ac.starlink.votable.VOTableVersion;
+import utils.FileGetter;
+import utils.XMLUtils;
 import uws.service.log.UWSLog.LogLevel;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 
 public class CustomVOTableFormat extends VOTableFormat {
 
@@ -50,118 +62,124 @@ public class CustomVOTableFormat extends VOTableFormat {
 	
 	//remettre en protected
 	public void writeHeader(final VOTableVersion votVersion, final TAPExecutionReport execReport, final BufferedWriter out) throws IOException, TAPException {
-		this.service.getLogger().log(LogLevel.INFO, "IHSANE", "test 1 : affiché? ", null);
-		/* ******************************************************************
-		   *                                                                *
-		   * NOTE:                                                          *
-		   *   Tout ce qui suit est un copier-coller de la fonction         *
-		   *   VOTableFormat.writeHeader(...). A changer selon les besoins  *
-		   *   mais attention à respecter le schéma VOTable et les headers  *
-		   *   TAP (surtout la description des colonnes). Le plus simple    *
-		   *   étant d'ajouter les headers nécessaires à la fin (cf NOTE    *
-		   *   plus bas).                                                   *
-		   *                                                                *
-		   ****************************************************************** */
-		//récupération de la requete à annote
-		
-		String query = execReport.parameters.getQuery();
-		// définir le noeud racine votable 
-		out.write("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
-		out.newLine();
-		out.write("<VOTABLE" + VOSerializer.formatAttribute("version", votVersion.getVersionNumber()) + VOSerializer.formatAttribute("xmlns", votVersion.getXmlNamespace()) + VOSerializer.formatAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance") + VOSerializer.formatAttribute("xsi:schemaLocation", votVersion.getXmlNamespace() + " " + votVersion.getSchemaLocation()) + ">");
-		out.newLine();
+        this.service.getLogger().log(LogLevel.INFO, "IHSANE", "test 1 : affiché? ", null);
+        /* ******************************************************************
+         *                                                                *
+         * NOTE:                                                          *
+         *   Tout ce qui suit est un copier-coller de la fonction         *
+         *   VOTableFormat.writeHeader(...). A changer selon les besoins  *
+         *   mais attention à respecter le schéma VOTable et les headers  *
+         *   TAP (surtout la description des colonnes). Le plus simple    *
+         *   étant d'ajouter les headers nécessaires à la fin (cf NOTE    *
+         *   plus bas).                                                   *
+         *                                                                *
+         ****************************************************************** */
+        //récupération de la requete à annote
 
-		// The RESOURCE note MUST have a type "results":	[REQUIRED]
-		out.write("<RESOURCE type=\"results\">");
-		out.newLine();
-		
-		String tableName="";
-		ArrayList<String> column_names = new ArrayList<String>();
-		this.service.getLogger().log(LogLevel.INFO, "IHSANE", "test 2 affiché?", null); //affiché
+        String query = execReport.parameters.getQuery();
+        // définir le noeud racine votable
+        out.write("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+        out.newLine();
+        out.write("<VOTABLE" + VOSerializer.formatAttribute("version", votVersion.getVersionNumber()) + VOSerializer.formatAttribute("xmlns", votVersion.getXmlNamespace()) + VOSerializer.formatAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance") + VOSerializer.formatAttribute("xsi:schemaLocation", votVersion.getXmlNamespace() + " " + votVersion.getSchemaLocation()) + ">");
+        out.newLine();
 
-		try {
-		
-			this.service.getLogger().log(LogLevel.INFO, "IHSANE", "test 3 : affiché? ", null);
+        // The RESOURCE note MUST have a type "results":	[REQUIRED]
+        out.write("<RESOURCE type=\"results\">");
+        out.newLine();
 
-			tableName = this.service.getFactory().createADQLParser().parseQuery(query).getFrom().getName();
-			this.service.getLogger().log(LogLevel.INFO, "IHSANE", tableName, null);
+        String tableName = "";
+        ArrayList<String> column_names = new ArrayList<String>();
+        this.service.getLogger().log(LogLevel.INFO, "IHSANE", "test 2 affiché?", null); //affiché
+
+        MangoMivotBuilder mangoMivotBuilder = null;
+        try {
+
+            this.service.getLogger().log(LogLevel.INFO, "IHSANE", "test 3 : affiché? ", null);
+
+            tableName = this.service.getFactory().createADQLParser().parseQuery(query).getFrom().getName();
+            this.service.getLogger().log(LogLevel.INFO, "IHSANE", tableName, null);
 //			boolean tableExist = AnnotationBuilder.tableExist(tableName);
-			boolean tableExist = true;
+            boolean tableExist = true;
 
-			//si la table existe
-			if(tableExist ==true) {
+            //si la table existe
+            if (tableExist == true) {
 
-				this.service.getLogger().log(LogLevel.INFO, "IHSANE","hello" , null);
-	
-				for(SelectItem selectItems : this.service.getFactory().createADQLParser().parseQuery(query).getSelect()) {
-					if(selectItems.getOperand() instanceof ADQLColumn) {
-						System.out.println("we add column_name in its arraylist :"+selectItems.getOperand().toString());
-						this.service.getLogger().log(LogLevel.INFO, "IHSANE", "we add column_name in its arraylist :"+selectItems.getOperand().toString(), null);
-						column_names.add(selectItems.getOperand().toString());
-					}
-					else if(selectItems instanceof SelectAllColumns){
-						// SearchColumnList starColumns = ((ADQLColumn) selectItems.getOperand()).getAdqlTable().getDBColumns();
-						this.service.getLogger().log(LogLevel.INFO, "IHSANE", "we add all columns :"+selectItems.getName(), null);
-						 column_names.add(selectItems.getName());
-					}
-				}
-				this.service.getLogger().log(LogLevel.INFO, "IHSANE", "test 4 : affiché? ", null);
-	
-				//AnnotationBuilder annotationBuilder = new AnnotationBuilder(tableName,column_names,out);
-				System.out.println("ca marche ");
-				System.out.println(column_names);
-				//annotationBuilder.writeAnnotations("result_" + execReport.jobID);
-			
-				//Faire des test pour voir si ca marche toujours pas
-				//this.service.getLogger().log(LogLevel.INFO, "Generate XML block", annotationBuilder.generateXMLblock(), null); //affiché
-				this.service.getLogger().log(LogLevel.INFO, "IHSANE", "test 5 : affiché? ", null);
-			}
-			else {
-				this.service.getLogger().log(LogLevel.INFO, "IHSANE","la table n'existe pas " , null);
-				//out.write(AnnotationBuilder.buildFailedTableAnnotation(tableName));
-			}
+                this.service.getLogger().log(LogLevel.INFO, "IHSANE", "hello", null);
 
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			//report avec buildFailedAnnotation.
-			StringWriter errors = new StringWriter();
-			e1.printStackTrace(new PrintWriter(errors)); 
-			out.write(CustomVOTableFormat.buildFailedAnnotation(errors.toString()));
+                for (SelectItem selectItems : this.service.getFactory().createADQLParser().parseQuery(query).getSelect()) {
+                    if (selectItems.getOperand() instanceof ADQLColumn) {
+                        System.out.println("we add column_name in its arraylist :" + selectItems.getOperand().toString());
+                        this.service.getLogger().log(LogLevel.INFO, "IHSANE", "we add column_name in its arraylist :" + selectItems.getOperand().toString(), null);
+                        column_names.add(selectItems.getOperand().toString());
+                    } else if (selectItems instanceof SelectAllColumns) {
+                        // SearchColumnList starColumns = ((ADQLColumn) selectItems.getOperand()).getAdqlTable().getDBColumns();
+                        this.service.getLogger().log(LogLevel.INFO, "IHSANE", "we add all columns :" + selectItems.getName(), null);
+                        column_names.add(selectItems.getName());
+                    }
+                }
+                this.service.getLogger().log(LogLevel.INFO, "IHSANE", "test 4 : affiché? ", null);
 
+				System.out.println(FileGetter.getXMLFile("subfile_annoted.mango.xml"));
+				System.out.println(Arrays.toString(new File(String.valueOf(FileGetter.getXMLFile("subfile_annoted.mango.xml"))).listFiles()));
+//				mangoMivotBuilder = new MangoMivotBuilder(tableName, column_names);
+
+                System.out.println("ca marche ");
+                System.out.println(column_names);
+
+
+                //Faire des test pour voir si ca marche toujours pas
+                //this.service.getLogger().log(LogLevel.INFO, "Generate XML block", annotationBuilder.generateXMLblock(), null); //affiché
+                this.service.getLogger().log(LogLevel.INFO, "IHSANE", "test 5 : affiché? ", null);
+            } else {
+                this.service.getLogger().log(LogLevel.INFO, "IHSANE", "la table n'existe pas ", null);
+                //out.write(AnnotationBuilder.buildFailedTableAnnotation(tableName));
+            }
+
+        } catch (Exception e1) {
+            // TODO Auto-generated catch block
+            //report avec buildFailedAnnotation.
+            StringWriter errors = new StringWriter();
+            e1.printStackTrace(new PrintWriter(errors));
+            out.write(CustomVOTableFormat.buildFailedAnnotation(errors.toString()));
+
+        }
+
+        //out.newLine();
+        if (mangoMivotBuilder == null) {
+			out.write(CustomVOTableFormat.buildFailedAnnotation("Couldn't resolve annotation : no profiles for table :" + tableName + "."));
 		}
-		
-		//out.newLine();
+		else if (mangoMivotBuilder.isMangoMappeable) {
+			out.write(XMLUtils.xmlToString(mangoMivotBuilder.doc));
+        } else {
+            out.write(CustomVOTableFormat.buildFailedAnnotation("Couldn't resolve annotation : no profiles for table :" + tableName + "."));
+        }
+        // Indicate that the query has been successfully processed:	[REQUIRED]
+//        out.write("<INFO name=\"QUERY_STATUS\" value=\"OK\"/>");
+//        out.newLine();
+//
+//        // Append the PROVIDER information (if any):	[OPTIONAL]
+//        if (service.getProviderName() != null) {
+//            out.write("<INFO name=\"PROVIDER\"" + VOSerializer.formatAttribute("value", service.getProviderName()) + ">" + ((service.getProviderDescription() == null) ? "" : VOSerializer.formatText(service.getProviderDescription())) + "</INFO>");
+//            out.newLine();
+//        }
+//
+//        // Append the ADQL query at the origin of this result:	[OPTIONAL]
+//        String adqlQuery = execReport.parameters.getQuery();
+//        if (adqlQuery != null) {
+//            out.write("<INFO name=\"QUERY\"" + VOSerializer.formatAttribute("value", adqlQuery) + "/>");
+//            out.newLine();
+//        }
+//
+//        // Append the fixed ADQL query, if any:	[OPTIONAL]
+//        String fixedQuery = execReport.fixedQuery;
+//        if (fixedQuery != null) {
+//            out.write("<INFO name=\"QUERY_AFTER_AUTO_FIX\"" + VOSerializer.formatAttribute("value", fixedQuery) + "/>");
+//            out.newLine();
+//        }
 
-		/**
-	
 
-		// Indicate that the query has been successfully processed:	[REQUIRED]
-		out.write("<INFO name=\"QUERY_STATUS\" value=\"OK\"/>");
-		out.newLine();
-
-		// Append the PROVIDER information (if any):	[OPTIONAL]
-		if (service.getProviderName() != null) {
-			out.write("<INFO name=\"PROVIDER\"" + VOSerializer.formatAttribute("value", service.getProviderName()) + ">" + ((service.getProviderDescription() == null) ? "" : VOSerializer.formatText(service.getProviderDescription())) + "</INFO>");
-			out.newLine();
-		}
-
-		// Append the ADQL query at the origin of this result:	[OPTIONAL]
-		String adqlQuery = execReport.parameters.getQuery();
-		if (adqlQuery != null) {
-			out.write("<INFO name=\"QUERY\"" + VOSerializer.formatAttribute("value", adqlQuery) + "/>");
-			out.newLine();
-		}
-
-		// Append the fixed ADQL query, if any:	[OPTIONAL]
-		String fixedQuery = execReport.fixedQuery;
-		if (fixedQuery != null) {
-			out.write("<INFO name=\"QUERY_AFTER_AUTO_FIX\"" + VOSerializer.formatAttribute("value", fixedQuery) + "/>");
-			out.newLine();
-		}
-		this.service.getLogger().log(LogLevel.INFO, "IHSANE", "test 6 : affiché? ", null);
-
-		// Insert the definition of all used coordinate systems:
-		HashSet<String> insertedCoosys = new HashSet<String>(10);
+        // Insert the definition of all used coordinate systems:
+		/*HashSet<String> insertedCoosys = new HashSet<String>(10);
 		for(DBColumn col : execReport.resultingColumns) {
 			// ignore columns with no coossys:
 			if (col instanceof TAPColumn && ((TAPColumn)col).getCoosys() != null) {
@@ -183,18 +201,18 @@ public class CustomVOTableFormat extends VOTableFormat {
 					insertedCoosys.add(coosys.getId());
 				}
 			}
-		}
-		
-		**/
-		/* ******************************************************************
-		   *                                                                *
-		   * NOTE:                                                          *
-		   *   Ajouter les nouveaux header ici!                             *
-		   *                                                                *
-		   ****************************************************************** */
+		}*/
 
-		out.flush();
-	}
+
+        /* ******************************************************************
+         *                                                                *
+         * NOTE:                                                          *
+         *   Ajouter les nouveaux header ici!                             *
+         *                                                                *
+         ****************************************************************** */
+
+        out.flush();
+    }
 
 
 

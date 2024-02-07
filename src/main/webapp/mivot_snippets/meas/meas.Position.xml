@@ -8,5 +8,5 @@
       <!-- Put here a concrete INSTANCE of Uncertainty or left blank -->
       <INSTANCE dmrole="meas:Error.sysError" dmtype="meas:Uncertainty"/>
    </INSTANCE>
-   <INSTANCE dmrole="meas:Position.coord" dmtype="coords:Point"/>
+   <INSTANCE dmrole="meas:Position.coord" dmtype="coords:LonLatPoint"/>
 </INSTANCE>

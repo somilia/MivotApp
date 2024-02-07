@@ -8,13 +8,15 @@ public class ModelBase {
      * dmtype_dict is a dictionary of dictionaries that stores the mapping between the columns of a table and the dmtype they are mapped to
      * dmtype_dict format : {dmtype1 : {dmrole1 : column, dmrole2 : column1, ...}, ...}
      **/
-
+    public String model_name;
+    public String model_url;
     public Map<String, Map<String, String>> dmtype_dict = new HashMap<>();
     Map<String, List<String>> mappeable = new HashMap<String, List<String>>();
 
-    // frame format : {frame : "FK5", equinox : "2000.0", epoch : "2000.0"}
-    public String frame = "FK5";
-    public ArrayList<String> error = new ArrayList<String>();
+    public Map<String, String> link_id = new HashMap<>();
+    public Map<String, String> snippet = new HashMap<>();
+    public Map<String, String> frame; // TODO : add frame feature
+    public Map<String, String> error; // Format : {dmtype : dmerror}
 
     public ModelBase(Map<String, List<String>> mappeable) {
         this.mappeable = mappeable;
@@ -31,12 +33,6 @@ public class ModelBase {
         dmtype_dict1.put(dmrole, column);
         dmtype_dict.put(dmtype, dmtype_dict1);
     }
-
-//    public void addToFrame(String caracteristic, String value) {
-//        /** This method is used to add a column to the frame list **/
-//        frame.put(caracteristic, value);
-//    }
-
     public ArrayList<String> getAllDmtypeKeys() {
         return new ArrayList<String>(dmtype_dict.keySet());
     }

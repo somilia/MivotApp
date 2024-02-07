@@ -15,7 +15,6 @@ public class MivotTAPFactory extends ConfigurableTAPFactory {
     public MivotTAPFactory(ServiceConnection service, Properties tapConfig) throws NullPointerException, TAPException {
         super(service, tapConfig);
         instance = this;
-        System.out.println(instance);
     }
 
     public static Optional<JDBCConnection> getJDBCConnection() throws TAPException {

@@ -1,8 +1,10 @@
 package ModelBaseInit;
 import TAPConnection.MivotTAPFactory;
-import TAPConnection.MivotTap;
+//import TAPConnection.MivotTap;
 import tap.TAPException;
+import utils.Vocabulary;
 
+import javax.servlet.ServletException;
 import java.util.*;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -14,30 +16,34 @@ import java.sql.PreparedStatement;
 
 public class ModelBaseInit {
 
-    public MivotTap mivotTap = new MivotTap();
+//    public MivotTap mivotTap = new MivotTap();
 
     public ModelBaseInit(){
         /** Default constructor **/
 
     }
 
-    public ModelBase getModelBase(String table, String model, ArrayList<String> columns_from_query) throws TAPException {
+    public ModelBase getModelBase(String table, String model, ArrayList<String> columns_from_query) throws TAPException, ServletException {
         /** This method is used to initialize the ModelBase **/
         ModelBase modelBase = null;
         QueryBuilder queryBuilder = new QueryBuilder(table, model, columns_from_query);
         Map<String, List<String>> mappeable;
-        mivotTap.init();
+//        mivotTap.init();
         try (Connection connection = getConnection()) {
             mappeable = this.getMappeableDmtype(connection, queryBuilder);
             modelBase = new ModelBase(mappeable);
-            Set<String> dmtype_list = mappeable.keySet();
-//            checkForFrame(connection, queryBuilder, modelBase);
-            for (String dmtype : dmtype_list) {
+            modelBase.model_name = model;
+            modelBase.model_url = Vocabulary.MIVOT_URL;
+            modelBase.error = checkForError(connection, queryBuilder, mappeable);
+            modelBase.frame = checkForFrame(connection, queryBuilder, mappeable, modelBase.error);
+            for (String dmtype : mappeable.keySet()) {
+                getAllID(connection, queryBuilder, dmtype, getTableColumnsFromDmtype(connection, dmtype, queryBuilder), modelBase);
                 for (String mapped_column : mappeable.get(dmtype)) {
-                    modelBase.addToDmtype(dmtype.replace("_",":"), getDmrole(connection, dmtype.replace(":","_"), mapped_column, queryBuilder).get(0).replace("_",":"), mapped_column);
+                    modelBase.addToDmtype(dmtype, getDmrole(connection, dmtype, mapped_column, queryBuilder).get(0), mapped_column);
                 }
             }
-            System.out.println("\nDictionary of dmtype: "+modelBase.dmtype_dict);
+            getSnippet(connection, queryBuilder, modelBase);
+            System.out.println("\nDictionary of dmtype: " + modelBase.dmtype_dict + "\nFrame : " + modelBase.frame + "\ndmError : " + modelBase.error + "\nsnippet : " + modelBase.snippet +"\nlink_id : " + modelBase.link_id);
             freeConnection();
         } catch (TAPException | SQLException e) {
             e.printStackTrace();
@@ -95,13 +101,11 @@ public class ModelBaseInit {
                 dmtype_to_remove.add(dmtype);
             } else {
                 List<String> possibleColumns = getAllPossibleColumns(connection, dmtype, queryBuilder);
-                mappeable.put(dmtype.replace("_",":"), possibleColumns);
+                mappeable.put(dmtype, possibleColumns);
             }
-
+            System.out.println("dmtype_mappeable : " + dmtype_mappeable);
         }
         dmtype_mappeable.removeAll(dmtype_to_remove);
-        System.out.println("dmtype_mappeable : " + dmtype_mappeable); // add mappeable columns
-        System.out.println("mappeable : " + mappeable);
         return mappeable;
     }
 
@@ -115,6 +119,24 @@ public class ModelBaseInit {
         }
         return classes_list;
     }
+    private void getAllID(Connection connection, QueryBuilder queryBuilder, String dmtype, ArrayList<String> allPossibleColumns, ModelBase modelBase) {
+        /** Get a list of all instance_id of the mapped_columns with the format {mapped_column = instance_id; ...} **/
+        for (String column : allPossibleColumns) {
+            ArrayList<String> id_list1 = executeMivotQuery(queryBuilder.getInstanceIDQuery(dmtype, column), connection);
+            if (!id_list1.isEmpty()) {
+                modelBase.link_id.put(column, id_list1.get(0));
+            }
+        }
+    }
+    private void getSnippet(Connection connection, QueryBuilder queryBuilder, ModelBase modelBase) {
+        /** Get a list of all snippet **/
+        for (String dmtype : modelBase.getAllDmtypeKeys()) {
+            ArrayList<String> snippet_list = executeMivotQuery(queryBuilder.getSnippetQuery(dmtype), connection);
+            if (!snippet_list.isEmpty()) {
+                modelBase.snippet.put(dmtype, snippet_list.get(0));
+            }
+        }
+    }
 
     private ArrayList<String> getModelColumnsFromDmtype(Connection connection, String dmtype, QueryBuilder queryBuilder) {
         /** Get a list of all mandatory columns from the model for a specific dmtype **/
@@ -122,7 +144,8 @@ public class ModelBaseInit {
     }
 
     private ArrayList<String> getTableColumnsFromDmtype(Connection connection, String dmtype, QueryBuilder queryBuilder) {
-        /** Get a list of all columns present in the query from the table for a specific dmtype **/
+        /** Get a list of all columns present in the query from the table for a specific dmtype
+         * Example: [sc_ra, sc_pm_ra, sc_pm_dec, sc_dec] **/
         ArrayList<String> table_columns;
         if (queryBuilder.columns_from_query.isEmpty()) {  // Get all columns from the table for this dmtype
             table_columns = executeMivotQuery(queryBuilder.getMappedColumnQuery(dmtype), connection);
@@ -133,7 +156,8 @@ public class ModelBaseInit {
     }
 
     private ArrayList<String> getAllPossibleColumns(Connection connection, String dmtype, QueryBuilder queryBuilder) {
-        /** Get a list of all columns present in the query from the model for a specific dmtype **/
+        /** Get a list of all columns present in the query from the model for a specific dmtype
+         * Example : [sc_ra, sc_pm_ra, sc_pm_dec, sc_dec] **/
         ArrayList<String> table_columns;
         if (queryBuilder.columns_from_query.isEmpty()) {  // Get all columns from the table for this dmtype
             table_columns = executeMivotQuery(queryBuilder.getMappedColumnQuery(dmtype), connection);
@@ -148,20 +172,38 @@ public class ModelBaseInit {
         return executeMivotQuery(queryBuilder.getDmroleQuery(dmtype, mapped_column), connection);
 
     }
-//    private void checkForFrame(Connection connection, QueryBuilder queryBuilder, ModelBase modelBase) {
-//        /** Check if the frame is present in the query in 2 possible cases :
-//         * - the frame is present in the columns of the query
-//         * - the frame is not present in the query but columns of the query require a frame : LonLatPos
-//         *  **/
-//        if (queryBuilder.columns_from_query.contains("frame") || queryBuilder.columns_from_query.contains("equinox") || queryBuilder.columns_from_query.contains("epoch")) {
-//            ArrayList<String> frame_list = executeMivotQuery(queryBuilder.getFrameQuery(), connection);
-//            if (!frame_list.isEmpty()) {
-//                modelBase.addToFrame("frame", frame_list.get(0));
-//            }
-//        } else if (queryBuilder.columns_from_query.contains("sc_ra") || queryBuilder.columns_from_query.contains("sc_dec") || queryBuilder.columns_from_query.contains("sc_err_min")) {
-//            modelBase.error.add("frame");
-//        }
-//    }
+    private Map<String, String> checkForFrame(Connection connection, QueryBuilder queryBuilder, Map<String, List<String>> modelBase, Map<String, String> dmError) {
+        /** Check if the frame is present in the column "frame" for each mapped columns and add it to the ModelBase frame attribute
+         *  **/
+        Map<String, String> frame = new HashMap<>();
+        for (String dmtype : modelBase.keySet()) {
+            if (!dmError.containsKey(dmtype)) {
+                ArrayList<String> frame_list = executeMivotQuery(queryBuilder.getFrameQuery(dmtype), connection);
+                if (!frame_list.isEmpty()) {
+                    frame.put(dmtype, frame_list.get(0));
+                }
+            }
+        }
+        return frame;
+    }
+
+    private Map<String, String> checkForError(Connection connection, QueryBuilder queryBuilder, Map<String, List<String>> mappeable) {
+        /** Check if "error" is present in the column property for each dmtype
+         *  **/
+        Map<String, String> dmError = new HashMap<>();
+        for (String dmtype : mappeable.keySet()) {
+            ArrayList<String> error_list = executeMivotQuery(queryBuilder.getErrorQuery(dmtype), connection);
+            if (!error_list.isEmpty()) {
+                ArrayList<String> dmerror_list = executeMivotQuery(queryBuilder.getFromDmErrorQuery(error_list.get(0)), connection);
+                if (!dmerror_list.isEmpty()) {
+                    dmError.put(dmerror_list.get(0), dmtype);
+                }
+            }
+
+        }
+//        mappeable.keySet().removeAll(dmError.keySet());
+        return dmError;
+    }
 
     public static ArrayList<String> PrepareAndExecuteStatement(String query, Connection connection, ArrayList<String> parameters_from_query){
         /** Prepare and execute a query with parameters **/
@@ -218,16 +260,5 @@ public class ModelBaseInit {
         }
         resultSet.close();
         return listResult;
-    }
-
-    public static void main(String[] args) throws TAPException {
-        ArrayList<String> col_to_query = new ArrayList<>();
-        col_to_query.add("sc_ra");
-        col_to_query.add("sc_pm_ra");
-        col_to_query.add("sc_dec");
-        col_to_query.add("sc_err_min");
-        ModelBaseInit modelbaseInit = new ModelBaseInit();
-        modelbaseInit.getModelBase("epic_src","mango", col_to_query);
-
     }
 }
