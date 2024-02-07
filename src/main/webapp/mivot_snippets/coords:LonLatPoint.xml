@@ -1,9 +1,0 @@
-<INSTANCE dmrole="" dmtype="mango:Source">
-  <!-- Root class of the model. MANGO instance are meant of be Source instances.
-A source has an identifier and two docks: one for the parameters and one for the associated data." -->
-  <ATTRIBUTE dmrole="mango:Source.identifier" dmtype="ivoa:string" ref="@@@@@" value=""/>
-  <COLLECTION dmrole="mango:Source.associatedDataDock">
-    <!-- Put here a concrete INSTANCE of AssociatedData or left blank -->
-  </COLLECTION>
-  <COLLECTION dmrole="mango:Source.propertyDock"/>
-</INSTANCE>
