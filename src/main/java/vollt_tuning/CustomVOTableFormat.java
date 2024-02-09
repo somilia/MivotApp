@@ -1,32 +1,22 @@
 package vollt_tuning;
 
 import java.io.*;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 import MangoMivotBuild.MangoMivotBuilder;
 import adql.query.SelectAllColumns;
 import adql.query.SelectItem;
 import adql.query.operand.ADQLColumn;
-import org.xml.sax.SAXException;
 import tap.ServiceConnection;
 import tap.TAPException;
 import tap.TAPExecutionReport;
-import tap.config.ConfigurableServiceConnection;
 import tap.formatter.VOTableFormat;
-//import model.AnnotationBuilder;
 import uk.ac.starlink.votable.DataFormat;
 import uk.ac.starlink.votable.VOSerializer;
 import uk.ac.starlink.votable.VOTableVersion;
-import utils.FileGetter;
+
 import utils.XMLUtils;
 import uws.service.log.UWSLog.LogLevel;
-
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
 
 public class CustomVOTableFormat extends VOTableFormat {
 
@@ -119,13 +109,12 @@ public class CustomVOTableFormat extends VOTableFormat {
                 }
                 this.service.getLogger().log(LogLevel.INFO, "IHSANE", "test 4 : affiché? ", null);
 
-				System.out.println(FileGetter.getXMLFile("subfile_annoted.mango.xml"));
-				System.out.println(Arrays.toString(new File(String.valueOf(FileGetter.getXMLFile("subfile_annoted.mango.xml"))).listFiles()));
-//				mangoMivotBuilder = new MangoMivotBuilder(tableName, column_names);
+				mangoMivotBuilder = new MangoMivotBuilder(tableName, column_names);
 
                 System.out.println("ca marche ");
                 System.out.println(column_names);
 
+                //annotationBuilder.writeAnnotations("result_" + execReport.jobID);
 
                 //Faire des test pour voir si ca marche toujours pas
                 //this.service.getLogger().log(LogLevel.INFO, "Generate XML block", annotationBuilder.generateXMLblock(), null); //affiché
@@ -148,7 +137,7 @@ public class CustomVOTableFormat extends VOTableFormat {
         if (mangoMivotBuilder == null) {
 			out.write(CustomVOTableFormat.buildFailedAnnotation("Couldn't resolve annotation : no profiles for table :" + tableName + "."));
 		}
-		else if (mangoMivotBuilder.isMangoMappeable) {
+		else if (mangoMivotBuilder.isMappeable) {
 			out.write(XMLUtils.xmlToString(mangoMivotBuilder.doc));
         } else {
             out.write(CustomVOTableFormat.buildFailedAnnotation("Couldn't resolve annotation : no profiles for table :" + tableName + "."));

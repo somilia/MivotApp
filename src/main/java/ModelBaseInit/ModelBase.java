@@ -11,15 +11,12 @@ public class ModelBase {
     public String model_name;
     public String model_url;
     public Map<String, Map<String, String>> dmtype_dict = new HashMap<>();
-    Map<String, List<String>> mappeable = new HashMap<String, List<String>>();
-
-    public Map<String, String> link_id = new HashMap<>();
+    public Map<String, String> link_id = new HashMap<>(); // Todo : remove this feature if we don't use it
     public Map<String, String> snippet = new HashMap<>();
     public Map<String, String> frame; // TODO : add frame feature
     public Map<String, String> error; // Format : {dmtype : dmerror}
 
-    public ModelBase(Map<String, List<String>> mappeable) {
-        this.mappeable = mappeable;
+    public ModelBase() {
     }
 
     public void addToDmtype(String dmtype, String dmrole, String column) {
@@ -36,14 +33,8 @@ public class ModelBase {
     public ArrayList<String> getAllDmtypeKeys() {
         return new ArrayList<String>(dmtype_dict.keySet());
     }
-
     public Map<String, String> getDictForDmtype(String dmtype) {
         return dmtype_dict.get(dmtype);
     }
-    public boolean DmrolePresentInDict(String dmtype, String dmrole) {
-        return dmtype_dict.get(dmtype).containsKey(dmrole);
-    }
-
-
 }
 

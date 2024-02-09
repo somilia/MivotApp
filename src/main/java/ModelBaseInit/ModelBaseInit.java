@@ -1,6 +1,5 @@
 package ModelBaseInit;
 import TAPConnection.MivotTAPFactory;
-//import TAPConnection.MivotTap;
 import tap.TAPException;
 import utils.Vocabulary;
 
@@ -16,11 +15,8 @@ import java.sql.PreparedStatement;
 
 public class ModelBaseInit {
 
-//    public MivotTap mivotTap = new MivotTap();
-
     public ModelBaseInit(){
         /** Default constructor **/
-
     }
 
     public ModelBase getModelBase(String table, String model, ArrayList<String> columns_from_query) throws TAPException, ServletException {
@@ -28,16 +24,15 @@ public class ModelBaseInit {
         ModelBase modelBase = null;
         QueryBuilder queryBuilder = new QueryBuilder(table, model, columns_from_query);
         Map<String, List<String>> mappeable;
-//        mivotTap.init();
         try (Connection connection = getConnection()) {
             mappeable = this.getMappeableDmtype(connection, queryBuilder);
-            modelBase = new ModelBase(mappeable);
+            modelBase = new ModelBase();
             modelBase.model_name = model;
             modelBase.model_url = Vocabulary.MIVOT_URL;
             modelBase.error = checkForError(connection, queryBuilder, mappeable);
             modelBase.frame = checkForFrame(connection, queryBuilder, mappeable, modelBase.error);
             for (String dmtype : mappeable.keySet()) {
-                getAllID(connection, queryBuilder, dmtype, getTableColumnsFromDmtype(connection, dmtype, queryBuilder), modelBase);
+                //getAllID(connection, queryBuilder, dmtype, getTableColumnsFromDmtype(connection, dmtype, queryBuilder), modelBase); useless TODO : remove this feature
                 for (String mapped_column : mappeable.get(dmtype)) {
                     modelBase.addToDmtype(dmtype, getDmrole(connection, dmtype, mapped_column, queryBuilder).get(0), mapped_column);
                 }
@@ -119,15 +114,16 @@ public class ModelBaseInit {
         }
         return classes_list;
     }
-    private void getAllID(Connection connection, QueryBuilder queryBuilder, String dmtype, ArrayList<String> allPossibleColumns, ModelBase modelBase) {
-        /** Get a list of all instance_id of the mapped_columns with the format {mapped_column = instance_id; ...} **/
+    /** Will probably never be useful TODO : remove this feature
+     * private void getAllID(Connection connection, QueryBuilder queryBuilder, String dmtype, ArrayList<String> allPossibleColumns, ModelBase modelBase) {
+        // Get a list of all instance_id of the mapped_columns with the format {mapped_column = instance_id; ...}
         for (String column : allPossibleColumns) {
             ArrayList<String> id_list1 = executeMivotQuery(queryBuilder.getInstanceIDQuery(dmtype, column), connection);
             if (!id_list1.isEmpty()) {
                 modelBase.link_id.put(column, id_list1.get(0));
             }
         }
-    }
+    }**/
     private void getSnippet(Connection connection, QueryBuilder queryBuilder, ModelBase modelBase) {
         /** Get a list of all snippet **/
         for (String dmtype : modelBase.getAllDmtypeKeys()) {

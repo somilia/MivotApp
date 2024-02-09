@@ -3,23 +3,12 @@
     <servlet>
         <display-name>tap</display-name>
         <servlet-name>MyTAP</servlet-name>
-        <servlet-class>tap.config.ConfigurableTAPServlet</servlet-class>
+        <servlet-class>MangoMivotBuild.MivotTAPServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>MyTAP</servlet-name>
         <url-pattern>/tap/*</url-pattern>
     </servlet-mapping>
-
-    <servlet>
-        <display-name>MivotTap</display-name>
-        <servlet-name>MivotTap</servlet-name>
-        <servlet-class>com.example.mivotapp</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>MivotTap</servlet-name>
-        <url-pattern>/mivot-tap/*</url-pattern>
-    </servlet-mapping>
-
     <resource-ref>
         <res-ref-name>jdbc/myDatasource</res-ref-name>
         <res-type>javax.sql.DataSource</res-type>

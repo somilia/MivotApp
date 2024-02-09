@@ -3,12 +3,13 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Map;
+import java.util.Arrays;
 import java.util.Objects;
 
+import MangoMivotBuild.MivotTAPServlet;
 import ModelBaseInit.ModelBase;
+import jdk.jshell.Snippet;
 import org.w3c.dom.*;
 import org.w3c.dom.traversal.DocumentTraversal;
 import org.w3c.dom.traversal.NodeFilter;
@@ -20,12 +21,13 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
+import static MangoMivotBuild.MangoMivotBuilder.SnippetPath;
 import static utils.Vocabulary.EmptyRef;
 
 public class WalkerMivotManager {
     /* class used to process walker using only static function */
 
-    public static String FilesPath = "src/main/webapp/mivot_snippets/"; //TODO:remove the hard coded path
+    public static String FilesPath = "mivot_snippets/"; //TODO:remove the hard coded path
 
     public static void changeAttributeValue(TreeWalker walker, String attributeNameToCheck, String attributeValueToCheck, String attributeToChange, String attributeValueToChange, String valueToSet) {
         /* the function lookForAttribute(attributeNameToCheck, attributeValueToCheck) and change the value of attributeToChange into attributeToChange */
@@ -39,6 +41,8 @@ public class WalkerMivotManager {
     }
 
     public static void printWalker(TreeWalker walker) {
+        /** This function is used to print the walker
+         * Very useful for debugging **/
         walker.setCurrentNode(walker.getRoot());
         do {
             Node current = walker.getCurrentNode();
@@ -51,21 +55,6 @@ public class WalkerMivotManager {
             }
         } while (walker.nextNode() != null);
         walker.setCurrentNode(walker.getRoot());
-    }
-
-    public static Node getNodeByTag(TreeWalker walker, String tagName, Document doc) {
-        NodeList nodeList = doc.getElementsByTagName(tagName);
-        System.out.println("Node list length : " + nodeList.getLength());
-        Node targetNode = null;
-        if (nodeList.getLength() > 0) {
-            targetNode = nodeList.item(0);
-        }
-        else {
-            System.out.println("No unique node found with the tag " + tagName);
-            targetNode = walker.getRoot().getFirstChild();
-        }
-        System.out.println("Target node : " + targetNode.getNodeName());
-        return targetNode;
     }
 
     public static Node getNodeByName(TreeWalker walker, String tagName, String attributeName, String attributeValue, Document doc) {
@@ -91,7 +80,7 @@ public class WalkerMivotManager {
         }
     }
 
-    public static void cleanUpNode(TreeWalker walker) throws ParserConfigurationException, SAXException, IOException, TransformerException, URISyntaxException {
+    public static void cleanUpNode(TreeWalker walker) {
 
         Node parent = walker.getRoot();
         for (int i = 0; i < parent.getChildNodes().getLength(); i++) {
@@ -100,13 +89,13 @@ public class WalkerMivotManager {
             for (int j = 0; j < child.getChildNodes().getLength(); j++) {
                 Node children = child.getChildNodes().item(j);
                 if (children.getNodeName().equals("REPORT")) {
-                    children.setTextContent("Automatically generated. NotSet instance have been removed");
+                    children.setTextContent(" NotSet instance have been removed");
                 }
                 removeUnsetElements(children, EmptyRef);
             }
 
             if (child.getNodeName().equals("REPORT")) {
-                child.setTextContent("Automatically generated. NotSet instance have been removed");
+                child.setTextContent(" NotSet instance have been removed");
             }
             if (child.getNodeName().equals("INSTANCE") || child.getNodeName().equals("ATTRIBUTE")) {
                 removeUnsetElements(child, EmptyRef);
@@ -161,8 +150,10 @@ public class WalkerMivotManager {
     public static void removeElement(Node parentNode, String value) {
         boolean noChild = true;
         for(int i =0; i<parentNode.getChildNodes().getLength();i++) {
-            if(parentNode.getChildNodes().item(i).getNodeName().equals("INSTANCE") || parentNode.getChildNodes().item(i).getNodeName().equals("ATTRIBUTE") || parentNode.getChildNodes().item(i).getNodeName().equals("COLLECTION")
-                    ||parentNode.getChildNodes().item(i).getNodeName().equals("REFERENCE")){
+            if(parentNode.getChildNodes().item(i).getNodeName().equals("INSTANCE")
+                    || parentNode.getChildNodes().item(i).getNodeName().equals("ATTRIBUTE")
+                    || parentNode.getChildNodes().item(i).getNodeName().equals("COLLECTION")
+                    || parentNode.getChildNodes().item(i).getNodeName().equals("REFERENCE")){
                 noChild=false;
                 break;
             }
@@ -219,10 +210,9 @@ public class WalkerMivotManager {
         }while (walkerToAdd.nextSibling() != null);
     }
 
-    public static File convertWalkerToFile(TreeWalker walker, String fileName, Document templateDoc) throws ParserConfigurationException, SAXException, IOException, TransformerException, URISyntaxException {
+    public static File convertWalkerToFile(String SnippetPath, TreeWalker walker, String fileName, Document templateDoc) throws IOException, URISyntaxException {
 
-
-        File newMangoFile = new File(FilesPath + fileName);
+        File newMangoFile = new File(Objects.requireNonNull(getRealPath(SnippetPath, fileName)));
 
         PrintWriter pw = new PrintWriter(newMangoFile);
         String finalString = XMLUtils.xmlToString(templateDoc); // converting the doc to a string to push it in the buffer
@@ -231,8 +221,34 @@ public class WalkerMivotManager {
 
         return newMangoFile;
     }
-    public static String findSnippetFile(String SnippetPath, String model, ModelBase modelBase, String dmtype) throws URISyntaxException {
-        /** The function look for the right snippet file.
+
+    public static String getRealPath(String SnippetPath, String fileName) {
+        /** This function is used to get the path of the file
+         *  We need the ServletContext to get the real path of the file
+         */
+        String resource;
+        if (fileName == null) {  // This case is used to get only the path of the folder SnippetPath "mivot_snippets/"
+            resource = MivotTAPServlet.servletContext.getRealPath(SnippetPath);
+        }else {
+            resource = MivotTAPServlet.servletContext.getRealPath(SnippetPath+fileName);
+        }
+        try {
+            if (resource == null) {
+                System.out.println("\n !!! Resource is null, XML file not found : " + fileName + " !!!\n");
+                return null;
+            }else {
+                return resource;
+            }
+        } catch (NullPointerException e) {
+            System.out.println("No file found.");
+            System.out.println(e.getStackTrace());
+            return null;
+        }
+    }
+
+    public static File findSnippetFile(String SnippetPath, String model, ModelBase modelBase, String dmtype) throws URISyntaxException {
+        /** The function look for the right snippet file. The goal is to find in any case the right file, with the less time possible
+         * by calling in the worst case findFilesBySuffix.
          * First case :
          * - The current model processed is the right one
          * - The snippet name is in the modelBase
@@ -247,74 +263,65 @@ public class WalkerMivotManager {
          * - The snippet name is unknown, we try to guess by looking the dmtype
          */
         System.out.println("Looking for the snippet file for the model " + model + " and the dmtype " + dmtype);
-        File folder = new File(SnippetPath + model);
-        File file1 = new File((SnippetPath + model + "/" + modelBase.snippet.get(dmtype) + ".xml")); // Case where the snippet name is in the modelBase
-        File file2 = new File((SnippetPath + model + "/" + dmtype + ".xml")); // Case where the snippet name is unknown, we try to guess by looking the dmtype
-        System.out.println("File 1 : " + file1.getAbsolutePath());
-        System.out.println("File 2 : " + file2.getAbsolutePath());
 
-        System.out.println("Model list creating");
         ArrayList<String> model_list = new ArrayList<>();
-        // Do a list of all the model by looking the name of each folder in the SnippetPath
-//        System.out.println(FileGetter.getXMLFile("mivot_snippets").getAbsolutePath());
-        for (File file : Objects.requireNonNull(new File(String.valueOf(FileGetter.getXMLFile("subfile_annoted.mango.xml"))).listFiles())) {
+        ArrayList<File> files = new ArrayList<>(Arrays.asList(Objects.requireNonNull(new File(Objects.requireNonNull(getRealPath(SnippetPath, model))).listFiles())));
+        for (File file : files) {  // Do a list of all the model by looking the name of each folder in the SnippetPath
             if (file.isDirectory()) {
                 model_list.add(file.getName());
             }
         }
-        System.out.println("Model list : " + model_list);
-        if (modelBase.snippet.containsKey(dmtype)) {
-            if (folder.exists() && folder.isDirectory() &&
-                file1.isFile() && file1.getName().endsWith(modelBase.snippet.get(dmtype)+".xml")) {
-                System.out.println("File found : " + file1.getAbsolutePath());
-                return (new File(SnippetPath + model + "/" + modelBase.snippet.get(dmtype) + ".xml").getAbsolutePath());
-            } else if (modelBase.snippet.containsKey(dmtype) && folder.exists() && folder.isDirectory() &&
-                    file2.isFile() && file2.getName().endsWith(dmtype+".xml")) {
-                System.out.println("File found : " + file2.getAbsolutePath());
-                return (new File(SnippetPath + model + "/" + dmtype + ".xml").getAbsolutePath());
-            } else {
-                System.out.println("No file found.");
-                return WalkerMivotManager.findFilesBySuffix(SnippetPath, modelBase.snippet.get(dmtype)+".xml", model_list);
-            }
+        if (model==null) { // if model is null, we try to find the file in each folder -> it is the case in buildGlobals
+            return WalkerMivotManager.findFilesBySuffix(SnippetPath, dmtype+".xml", model_list);
+        }
+        File folder = new File(Objects.requireNonNull(getRealPath(SnippetPath, model)));
+        File file1 = null;
+        File file2 = null;
+        if(modelBase.snippet.containsKey(dmtype)){
+            // Case where the snippet name is in the modelBase
+            file1 = new File(Objects.requireNonNull(getRealPath(SnippetPath, model + "/" + modelBase.snippet.get(dmtype) + ".xml")));
+            return file1;
+        } else if (getRealPath(SnippetPath, model + "/" + dmtype.replace(":",".") + ".xml") != null) {
+            // Case where the snippet name is unknown, we try to guess by looking the dmtype
+            file2 = new File(Objects.requireNonNull(getRealPath(SnippetPath, model + "/" + dmtype.replace(":", ".") + ".xml")));
+            return file2;
+        }
+
+        if (dmtype.contains(":")) {  // Case where the current model processed is not the right one : so we are actually doing an importation of another model
+            return WalkerMivotManager.findFilesBySuffix(SnippetPath, dmtype.split(":")[1]+".xml", model_list);  // We try to find only with the dmrole
         } else {
-            if (dmtype.contains(":")) {
-                System.out.println("No file found.");
-                return WalkerMivotManager.findFilesBySuffix(SnippetPath, dmtype.split(":")[1]+".xml", model_list);
-            } else {
-                System.out.println("No file found.");
-                return WalkerMivotManager.findFilesBySuffix(SnippetPath, dmtype+".xml", model_list);
-            }
+            return WalkerMivotManager.findFilesBySuffix(SnippetPath, dmtype+".xml", model_list);
         }
     }
-    public static String findFilesBySuffix(String folderPath, String suffix, ArrayList<String> model_list) {
+    public static File findFilesBySuffix(String SnippetPath, String suffix, ArrayList<String> model_list) throws URISyntaxException {
         /** The function look in each folder if a file ends with the suffix.
          * It is used to guess the snippet file name when it is not in the modelBase,
          * but also when the model in not the current one.
          */
-
-        for (String model : model_list) {
-            File folder = new File(folderPath + model);
-            System.out.println("Looking for files with the extension " + suffix + " in the folder : " + folder.getAbsolutePath());
-            if (folder.exists() && folder.isDirectory()) {
-                File[] files = folder.listFiles();
-
-                if (files != null) {
-                    for (File file : files) {
-                        if (file.isFile() && file.getName().endsWith(suffix)) {
-                            System.out.println("File found : " + file.getAbsolutePath());
-                            return (new File(folderPath + model + "/" + file.getName()).getAbsolutePath());
+        try {
+            for (String model : model_list) {
+                File folder = new File(Objects.requireNonNull(getRealPath(SnippetPath, model)));
+                System.out.println("Looking for files with the extension " + suffix + " in the folder : " + folder.getAbsolutePath());
+                if (folder.exists() && folder.isDirectory()) {
+                    File[] files = folder.listFiles();
+                    if (files != null) {
+                        for (File file : files) {
+                            if (file.isFile() && file.getName().endsWith(suffix)) {
+                                System.out.println("File found : " + file.getAbsolutePath());
+                                return file;
+                            }
                         }
+                    } else {
+                        System.out.println("Empty folder.");
                     }
                 } else {
-                    System.out.println("Empty folder.");
-
+                    System.out.println("Folder does not exist.");
                 }
-            } else {
-                System.out.println("Folder does not exist.");
             }
+        } catch (NullPointerException e) {
+            System.out.println("No file found.");
+            return null;
         }
-        System.out.println("No file found.");
         return null;
     }
-
 }
